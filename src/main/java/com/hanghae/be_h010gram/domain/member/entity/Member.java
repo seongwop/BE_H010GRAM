@@ -26,5 +26,5 @@ public class Member {
 
     @Column(columnDefinition = "LONGTEXT")
     @Lob
-    private String profileImg;
+    private String profileImage;
 }
