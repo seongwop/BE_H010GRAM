@@ -5,7 +5,6 @@ import com.hanghae.be_h010gram.domain.member.dto.LoginRequestDto;
 import com.hanghae.be_h010gram.domain.member.dto.MemberResponseDto;
 import com.hanghae.be_h010gram.security.auth.UserDetailsImpl;
 import com.hanghae.be_h010gram.util.ResponseDto;
-import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
