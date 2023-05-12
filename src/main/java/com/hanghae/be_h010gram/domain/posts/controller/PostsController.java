@@ -2,7 +2,6 @@ package com.hanghae.be_h010gram.domain.posts.controller;
 
 import com.hanghae.be_h010gram.domain.posts.dto.PostsRequestDto;
 import com.hanghae.be_h010gram.domain.posts.dto.PostsResponseDto;
-import com.hanghae.be_h010gram.domain.posts.entity.Posts;
 import com.hanghae.be_h010gram.domain.posts.service.PostsService;
 import com.hanghae.be_h010gram.security.auth.UserDetailsImpl;
 import com.hanghae.be_h010gram.util.ResponseDto;

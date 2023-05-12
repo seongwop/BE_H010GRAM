@@ -41,7 +41,7 @@ public class PostsService {
         Posts posts = postsRepository.findById(id).orElseThrow(
                 () -> new CustomException(POST_NOT_FOUND)
         );
-        return ResponseDto.setSuccess(id +"번 게시글 조회 성공", new PostsResponseDto(posts));
+        return ResponseDto.setSuccess(id + "번 게시글 조회 성공", new PostsResponseDto(posts));
     }
 
     // 게시물 등록
