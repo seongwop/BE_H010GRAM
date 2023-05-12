@@ -22,7 +22,7 @@ public class PostsService {
 
     // 전체 게시물 목록 조회
     @Transactional(readOnly = true)
-    public List<PostResponseDto> getAllPosts() {
+    public ResponseDto<> getAllPosts() {
         return postsRepository.findAllByOrderByCreatedAtDesc().stream().map(PostResponseDto::new).collect(Collectors.toList());
     }
 
@@ -98,4 +98,5 @@ public class PostsService {
 //        }
 //
 //    }
+
 }

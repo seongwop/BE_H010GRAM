@@ -18,7 +18,7 @@ public class PostsController {
 
     // 목록 조회
     @GetMapping("/posts")
-    public List<ResponseDto<Posts>> getAllPosts() {
+    public ResponseDto<List<Posts>> getAllPosts() {
         return postsService.getAllPosts();
     }
 

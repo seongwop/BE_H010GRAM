@@ -7,4 +7,5 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 public class PostsRequestDto {
     private String content;
+
 }

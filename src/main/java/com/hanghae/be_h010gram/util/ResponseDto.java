@@ -18,4 +18,5 @@ public class ResponseDto<T> {
     public static <T> ResponseDto<T> setSuccess(String message) {
         return ResponseDto.set(message, null);
     }
+
 }
