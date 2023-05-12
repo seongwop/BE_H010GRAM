@@ -1,4 +1,4 @@
 package com.hanghae.be_h010gram.domain.posts;
 
-public class test {
+public class Post {
 }
