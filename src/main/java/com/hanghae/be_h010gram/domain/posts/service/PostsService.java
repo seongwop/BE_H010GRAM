@@ -1,6 +1,7 @@
 package com.hanghae.be_h010gram.domain.posts.service;
 
 import com.hanghae.be_h010gram.domain.posts.dto.PostsRequestDto;
+import com.hanghae.be_h010gram.domain.posts.dto.PostsResponseDto;
 import com.hanghae.be_h010gram.domain.posts.entity.Posts;
 import com.hanghae.be_h010gram.domain.posts.repository.PostsRepository;
 import com.hanghae.be_h010gram.exception.CustomException;
@@ -8,6 +9,9 @@ import com.hanghae.be_h010gram.util.ResponseDto;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+
+import java.util.List;
+import java.util.stream.Collectors;
 
 import static com.hanghae.be_h010gram.exception.ExceptionEnum.INVALID_USER;
 import static com.hanghae.be_h010gram.exception.ExceptionEnum.POST_NOT_FOUND;
@@ -22,37 +26,40 @@ public class PostsService {
 
     // 전체 게시물 목록 조회
     @Transactional(readOnly = true)
-    public ResponseDto<> getAllPosts() {
-        return postsRepository.findAllByOrderByCreatedAtDesc().stream().map(PostResponseDto::new).collect(Collectors.toList());
+    public List<ResponseDto<PostsResponseDto>> getAllPosts() {
+        return postsRepository
+                .findAllByOrderByCreatedAtDesc()
+                .stream()
+                .map(post -> ResponseDto
+                        .setSuccess("전체 게시물 목록 조회 성공", new PostsResponseDto(post)))
+                .collect(Collectors.toList());
     }
 
     // 선택한 게시물 상세 조회
     @Transactional(readOnly = true)
-    public PostResponseDto getPost(Long id) {
+    public ResponseDto<PostsResponseDto> getPost(Long id) {
         Posts posts = postsRepository.findById(id).orElseThrow(
                 () -> new CustomException(POST_NOT_FOUND)
         );
-        return new PostsResponseDto(post);
+        return ResponseDto.setSuccess(id +"번 게시글 조회 성공", new PostsResponseDto(posts));
     }
 
     // 게시물 등록
     @Transactional
-    public PostResponseDto createPost(PostsRequestDto postsRequestDto, Members members) {
-        Posts post = postsRepository.saveAndFlush(new Posts(postsRequestDto, members));
-        return new PostsResponseDto(post);
+    public ResponseDto<PostsResponseDto> createPost(PostsRequestDto postsRequestDto, Members members) {
+        Posts posts = postsRepository.save(new Posts(postsRequestDto, members));
+        return ResponseDto.setSuccess("게시글 등록 성공", new PostsResponseDto(posts));
     }
 
     // 게시물 수정
     @Transactional
-    public PostResponseDto updatePost(Long id, PostsRequestDto postRequestDto, Members members) {
-
+    public ResponseDto<PostsResponseDto> updatePost(Long id, PostsRequestDto postRequestDto, Members members) {
         Posts posts = postsRepository.findById(id).orElseThrow(
                 () -> new CustomException(POST_NOT_FOUND)
         );
-
-        if (posts.getMembers().getId().equals(members.getId())) {
-            posts.update(postRequestDto);
-            return new PostResponseDto(posts);
+        if (posts.getMember().getId().equals(members.getId())) {
+            posts.update(postsRequestDto);
+            return ResponseDto.setSuccess("게시글 수정 성공", new PostsResponseDto(posts));
         } else {
             throw new CustomException(INVALID_USER);
         }
@@ -60,23 +67,22 @@ public class PostsService {
 
     // 게시물 삭제
     @Transactional
-    public UserResponseDto<Posts> deletePost(Long id, Members members) {
+    public ResponseDto<PostsResponseDto> deletePost(Long id, Members members) {
         Posts posts = postsRepository.findById(id).orElseThrow(
                 () -> new CustomException(POST_NOT_FOUND)
         );
-
         if (posts.getMembers().getId().equals(members.getId())) {
-            postsRepository.delete(post);
-            return ResponseDto.setSuccess("게시글 삭제 성공");
+            postsLikeRepository.deleteByPost(posts);
+            postsRepository.delete(posts);
+            return ResponseDto.setSuccess("게시글 삭제 성공", null);
         } else {
             throw new CustomException(INVALID_USER);
         }
-
     }
 
 //    // 좋아요
 //    @Transactional
-//    public UserResponseDto<Posts> updateLike(Long id) {
+//    public ResponseDto<> updateLike(Long id) {
 //        Posts posts = postsRepository.findById(id).orElseThrow(
 //                () -> new CustomException(POST_NOT_FOUND)
 //        );
