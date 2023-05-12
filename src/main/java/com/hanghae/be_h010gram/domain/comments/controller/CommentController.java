@@ -16,22 +16,19 @@ public class CommentController  {
 
     // 댓글 작성하기
     @PostMapping("/{postId}")
-    public CommentResponseDto commentWrite(@PathVariable Long boardId, @RequestBody CommentRequestDto commentRequestDto, @AuthenticationPrincipal UserDetailsImpl userDetails) {
-        return commentService.write(boardId,commentRequestDto,userDetails.getUser());
+    public CommentResponseDto commentWrite(@PathVariable Long postId, @RequestBody CommentRequestDto commentRequestDto, @AuthenticationPrincipal UserDetailsImpl userDetails) {
+        return commentService.write(postId,commentRequestDto,userDetails.getMember());
     }
 
     // 댓글 수정하기
     @PutMapping("/{commentId}")
     public CommentResponseDto commentUpdate(@PathVariable Long commentId, @RequestBody CommentRequestDto commentRequestDto, @AuthenticationPrincipal UserDetailsImpl userDetails) {
-        return commentService.update(commentId, commentRequestDto, userDetails.getUser());
+        return commentService.update(commentId, commentRequestDto, userDetails.getMember());
     }
 
     // 댓글 삭제하기
     @DeleteMapping("/{commentId}")
     public ResponseEntity<> commentDelete(@PathVariable Long id, @AuthenticationPrincipal UserDetailsImpl userDetails) {
-        return commentService.delete(id,userDetails.getUser());
+        return commentService.delete(id,userDetails.getMember());
     }
-
-
 }
-
