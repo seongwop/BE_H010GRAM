@@ -35,6 +35,6 @@ public class MemberService {
         String token = jwtUtil.createToken(member.getNickname(), member.getEmail(), member.getId());
         response.addHeader(JwtUtil.AUTHORIZATION_HEADER, token);
 
-        return ResponseDto.setSuccess(HttpStatus.OK.value(),"로그인 성공");
+        return ResponseDto.setSuccess("로그인 성공");
     }
 }
