@@ -15,12 +15,10 @@ public class PostLike {
     private Long id;
 
     @ManyToOne
-    @JsonManagedReference
     @JoinColumn(nullable = false)
     private Member member;
 
     @ManyToOne
-    @JsonManagedReference
     @JoinColumn(name = "post_id", nullable = false)
     private Post post;
 
