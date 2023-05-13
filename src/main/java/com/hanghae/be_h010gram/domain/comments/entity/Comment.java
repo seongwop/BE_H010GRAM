@@ -3,14 +3,14 @@ package com.hanghae.be_h010gram.domain.comments.entity;
 
 import com.hanghae.be_h010gram.domain.comments.dto.CommentRequestDto;
 import com.hanghae.be_h010gram.domain.member.entity.Member;
-import com.hanghae.be_h010gram.domain.posts.Post;
+import com.hanghae.be_h010gram.domain.post.entity.Post;
 import com.hanghae.be_h010gram.util.Timestamped;
 import jakarta.persistence.*;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
-import org.hibernate.annotations.ColumnDefault;
+
 
 @Entity
 @Getter
@@ -38,7 +38,6 @@ public class Comment extends Timestamped {
         this.content = commentRequestDto.getContent();
         this.post = post;
         this.member = member;
-        post.getComments().add(this);
     }
 
     public void modify(CommentRequestDto commentRequestDto) {

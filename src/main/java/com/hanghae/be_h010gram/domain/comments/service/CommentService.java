@@ -1,15 +1,16 @@
 package com.hanghae.be_h010gram.domain.comments.service;
 
 import com.hanghae.be_h010gram.domain.comments.dto.CommentRequestDto;
-import com.hanghae.be_h010gram.domain.comments.dto.CommentResponseDto;
 import com.hanghae.be_h010gram.domain.comments.entity.Comment;
 import com.hanghae.be_h010gram.domain.comments.repository.CommentRepository;
 import com.hanghae.be_h010gram.domain.member.entity.Member;
-import com.hanghae.be_h010gram.domain.posts.Post;
+import com.hanghae.be_h010gram.domain.post.entity.Post;
+import com.hanghae.be_h010gram.domain.post.repository.PostRepository;
+import com.hanghae.be_h010gram.exception.CustomException;
+import com.hanghae.be_h010gram.exception.ExceptionEnum;
+import com.hanghae.be_h010gram.util.ResponseDto;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -21,60 +22,54 @@ public class CommentService {
 
     private final PostRepository postRepository;
     private final CommentRepository commentRepository;
-    private final CommentResponseDto commentResponseDto;
 
     /**
      * 댓글 등록
      */
     @Transactional
-    public ResponseEntity<CommentResponseDto> saveComment(Long id, CommentRequestDto commentRequestDto, Member member) {
+    public ResponseDto<Long> saveComment(Long id, CommentRequestDto commentRequestDto, Member member) {
         Post post = validateExistPost(id);
         Comment comment = new Comment(commentRequestDto, post, member);
-        return ResponseEntity.status(HttpStatus.CREATED).body(commentResponseDto);
+        return ResponseDto.setSuccess(null);
     }
 
     /**
      * 댓글 수정
      */
     @Transactional
-    public ResponseEntity<CommentResponseDto> modifyComment(Long id, CommentRequestDto commentRequestDto, Member member) {
+    public ResponseDto<Long> modifyComment(Long id, CommentRequestDto commentRequestDto, Member member) {
         Comment comment = validateExistComment(id);
         validateCommentAuthor(member, comment);
         comment.modify(commentRequestDto);
-        return ResponseDto.setSuccess(comment.getId());
+        return ResponseDto.setSuccess("댓글 수정 성공",comment.getId());
     }
 
     /**
      * 댓글 삭제
      */
     @Transactional
-    public ResponseEntity<CommentResponseDto> deleteComment(Long id, Member member) {
+    public ResponseDto<?> deleteComment(Long id, Member member) {
         Comment comment = validateExistComment(id);
         validateCommentAuthor(member, comment);
         comment.getPost().getComments().remove(comment);
-        return ResponseDto.setSuccess(null);
+        return ResponseDto.setSuccess("댓글 삭제 성공",null);
     }
 
     public void validateCommentAuthor(Member member, Comment comment) {
         if (!member.getId().equals(comment.getMember().getId())) {
-            throw new IllegalArgumentException(ExceptionMessage.NO_AUTHORIZATION.getMessage());
+            throw new CustomException(ExceptionEnum.INVALID_USER);
         }
     }
 
     public Comment validateExistComment(Long id) {
         return commentRepository.findById(id).orElseThrow(
-                () -> new IllegalArgumentException(ExceptionMessage.NO_EXIST_COMMENT.getMessage())
+                () -> new CustomException(ExceptionEnum.COMMENT_NOT_FOUND)
         );
-    }
-    public void validatePostAuthor(Member member, Post post) {
-        if (!member.getNickname().equals(post.getNickname())) {
-            throw new IllegalArgumentException(ExceptionMessage.NO_AUTHORIZATION.getMessage());
-        }
     }
 
     public Post validateExistPost(Long id) {
         return postRepository.findById(id).orElseThrow(
-                () -> new IllegalArgumentException(ExceptionMessage.NO_EXIST_POST.getMessage())
+                () -> new CustomException(ExceptionEnum.POST_NOT_FOUND)
         );
     }
 }

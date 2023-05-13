@@ -1,9 +1,9 @@
 package com.hanghae.be_h010gram.domain.comments.dto;
 
-import com.hanghae.be_h010gram.domain.posts.Post;
+import com.hanghae.be_h010gram.domain.post.dto.PostResponseDto;
+import com.hanghae.be_h010gram.domain.post.entity.Post;
 import lombok.Getter;
 
-import javax.xml.stream.events.Comment;
 import java.time.LocalDateTime;
 
 @Getter
@@ -15,14 +15,14 @@ public class CommentResponseDto {
     private boolean likeStatus;
     private int likeCount;
 
-    public CommentResponseDto(Comment comment) {
-        this.id = comment.getId();
-        this.nickname = comment.getMember().getNickname();
-        this.content = comment.getContent();
-        this.createdAt = comment.getCreatedAt();
-        this.likeStatus = false;
-        this.likeCount = post.getLikes().size();
-    }
+//    public CommentResponseDto(Comment comment) {
+//        this.id = comment.getId();
+//        this.nickname = comment.getMember().getNickname();
+//        this.content = comment.getContent();
+//        this.createdAt = comment.getCreatedAt();
+//        this.likeStatus = false;
+//        this.likeCount = post.getLikes().size();
+//    }
 
     public void setLikeStatus(boolean status) {
         this.likeStatus = status;
@@ -34,7 +34,7 @@ public class CommentResponseDto {
 
         public AllPostResponseDto(Post post) {
             super(post);
-            this.gradient = post.getGradient();
+            //this.gradient = post.getGradient();
         }
     }
 
