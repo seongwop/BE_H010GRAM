@@ -1,6 +1,7 @@
 package com.hanghae.be_h010gram.domain.comment.service;
 
 import com.hanghae.be_h010gram.domain.comment.dto.CommentRequestDto;
+import com.hanghae.be_h010gram.domain.comment.dto.CommentResponseDto;
 import com.hanghae.be_h010gram.domain.comment.entity.Comment;
 import com.hanghae.be_h010gram.domain.comment.repository.CommentRepository;
 import com.hanghae.be_h010gram.domain.member.entity.Member;
@@ -41,13 +42,14 @@ public class CommentService {
 
     //댓글 수정
     @Transactional
-    public ResponseDto<Long> updateComment(Long id, CommentRequestDto commentRequestDto, Member member) {
+    public ResponseDto<CommentResponseDto> updateComment(Long id, CommentRequestDto commentRequestDto, Member member) {
         Comment comment = isExistComment(id);
 
         //작성자가 맞는지 확인
         isMemberEqual(member, comment);
-        comment.modify(commentRequestDto);
-        return ResponseDto.setSuccess("댓글 수정 성공",comment.getId());
+
+        comment.update(commentRequestDto);
+        return ResponseDto.setSuccess("댓글 수정 성공", new CommentResponseDto(comment));
     }
 
     /**

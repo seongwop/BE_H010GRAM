@@ -2,6 +2,7 @@ package com.hanghae.be_h010gram.domain.comment.controller;
 
 
 import com.hanghae.be_h010gram.domain.comment.dto.CommentRequestDto;
+import com.hanghae.be_h010gram.domain.comment.dto.CommentResponseDto;
 import com.hanghae.be_h010gram.domain.comment.service.CommentService;
 import com.hanghae.be_h010gram.security.auth.UserDetailsImpl;
 import com.hanghae.be_h010gram.util.ResponseDto;
@@ -28,9 +29,9 @@ public class CommentController {
 
     //댓글 수정
     @PutMapping("/{commentId}")
-    public ResponseDto<Long> updateComment(@PathVariable Long id,
-                                           @Valid @RequestBody CommentRequestDto commentRequestDto,
-                                           @AuthenticationPrincipal UserDetailsImpl userDetails) {
+    public ResponseDto<CommentResponseDto> updateComment(@PathVariable Long id,
+                                                         @Valid @RequestBody CommentRequestDto commentRequestDto,
+                                                         @AuthenticationPrincipal UserDetailsImpl userDetails) {
         return commentService.updateComment(id, commentRequestDto, userDetails.getMember());
     }
 

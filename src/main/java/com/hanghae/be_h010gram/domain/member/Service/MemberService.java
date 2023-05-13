@@ -52,7 +52,7 @@ public class MemberService {
     }
 
     @Transactional
-    public ResponseDto<?> register(MemberRequestDto.Register requestDto) {
+    public ResponseDto<String> register(MemberRequestDto.Register requestDto) {
         if (!requestDto.getPassword().equals(requestDto.getCheckPassword())) {
             throw new CustomException(ExceptionEnum.INVALID_USER_PASSWORD);
         }
@@ -68,7 +68,7 @@ public class MemberService {
                 .build();
 
         memberRepository.saveAndFlush(member);
-        return ResponseDto.setSuccess("회원가입 성공", new MemberResponseDto(member));
+        return ResponseDto.setSuccess("회원가입 성공");
     }
 
     @Transactional(readOnly = true)
