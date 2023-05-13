@@ -10,22 +10,22 @@ import java.util.List;
 
 @Getter
 public class PostResponseDto {
-    private Long id;
+//    private Long id;
     private String content;
-    private Member member;
+    private String nickname;
     private LocalDateTime createdAt;
-    private LocalDateTime modifiedAt;
+//    private LocalDateTime modifiedAt;
     private List<Comment> comment;
-//    private int like;
+    private int like;
 
     public PostResponseDto(Post post) {
-        this.id = post.getId();
+//        this.id = post.getId();
         this.content = post.getContent();
-        this.member = post.getMember();
+        this.nickname = post.getMember().getNickname();
         this.createdAt = post.getCreatedAt();
-        this.modifiedAt = post.getModifiedAt();
+//        this.modifiedAt = post.getModifiedAt();
         this.comment = getComment();
-//        this.like = post.getPostLike();
+        this.like = post.getPostLike();
     }
 
 }
