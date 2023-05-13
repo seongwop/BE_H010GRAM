@@ -3,6 +3,8 @@ package com.hanghae.be_h010gram.domain.comment.service;
 import com.hanghae.be_h010gram.domain.comment.dto.CommentRequestDto;
 import com.hanghae.be_h010gram.domain.comment.dto.CommentResponseDto;
 import com.hanghae.be_h010gram.domain.comment.entity.Comment;
+import com.hanghae.be_h010gram.domain.comment.entity.CommentLike;
+import com.hanghae.be_h010gram.domain.comment.repository.CommentLikeRepository;
 import com.hanghae.be_h010gram.domain.comment.repository.CommentRepository;
 import com.hanghae.be_h010gram.domain.member.entity.Member;
 import com.hanghae.be_h010gram.domain.post.entity.Post;
@@ -15,75 +17,82 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import static com.hanghae.be_h010gram.exception.ExceptionEnum.*;
-
 @Service
 @Transactional(readOnly = true)
 @RequiredArgsConstructor
 @Slf4j
 public class CommentService {
-
     private final PostRepository postRepository;
     private final CommentRepository commentRepository;
+    private final CommentLikeRepository commentLikeRepository;
 
-    //댓글 등록
+    /**
+     * 댓글 등록
+     */
     @Transactional
-    public ResponseDto<String> createComment(Long id, CommentRequestDto commentRequestDto, Member member) {
-       //게시글 조회
-        Post post = isExistPost(id);
-        //댓글 생성
-        Comment comment = new Comment(commentRequestDto);
+    public ResponseDto<CommentResponseDto> saveComment(Long id, CommentRequestDto commentRequestDto, Member member) {
+        Post post = validateExistPost(id);
 
-        //댓글 엔티티에 작성한 멤버 / 게시글 설정
-        comment.setMember(member);
-        comment.setPost(post);
-
-        commentRepository.save(comment);
-        return ResponseDto.setSuccess("success");
+        Comment comment = commentRepository.save(new Comment(commentRequestDto, post, member));
+        return ResponseDto.setSuccess("댓글 등록 성공",new CommentResponseDto(comment));
     }
 
-    //댓글 수정
+    /**
+     * 댓글 수정
+     */
     @Transactional
-    public ResponseDto<CommentResponseDto> updateComment(Long commentId, Long postId, CommentRequestDto commentRequestDto, Member member) {
-        Post post = isExistPost(postId);
-        Comment comment = isExistComment(commentId);
-
-        //작성자가 맞는지 확인
-        isMemberEqual(member, post);
-
-        //수정
-        comment.update(commentRequestDto);
-        return ResponseDto.setSuccess("댓글 수정 성공", new CommentResponseDto(comment));
+    public ResponseDto<CommentResponseDto> modifyComment(Long id, CommentRequestDto commentRequestDto, Member member) {
+        Comment comment = validateExistComment(id);
+        validateCommentAuthor(member, comment);
+        comment.modify(commentRequestDto);
+        return ResponseDto.setSuccess("댓글 수정 성공",new CommentResponseDto(comment));
     }
 
-
-    //댓글 삭제
+    /**
+     * 댓글 삭제
+     */
     @Transactional
-    public ResponseDto<String> deleteComment(Long postId, Long commentId, Member member) {
-        Post post = isExistPost(postId);
-        Comment comment = isExistComment(commentId);
-
-        isMemberEqual(member, post);
-
-        commentRepository.deleteById(comment.getId());
-        return ResponseDto.setSuccess("댓글 삭제 성공",null);
+    public ResponseDto<?> deleteComment(Long id, Member member) {
+        Comment comment = validateExistComment(id);
+        validateCommentAuthor(member, comment);
+        commentRepository.delete(comment);
+        return ResponseDto.setSuccess("댓글 삭제 성공");
     }
 
-    public void isMemberEqual(Member member, Post post) {
-        if (!member.getId().equals(post.getMember().getId())) {
-            throw new CustomException(INVALID_USER);
+    public void validateCommentAuthor(Member member, Comment comment) {
+        if (!member.getId().equals(comment.getMember().getId())) {
+            throw new CustomException(ExceptionEnum.COMMENT_NOT_FOUND);
         }
     }
 
-    public Comment isExistComment(Long id) {
+    //댓글 좋아요
+    @Transactional
+    public ResponseDto<?> likeComment(Long commentId, Member member) {
+        // 댓글 존재확인.
+        Comment comment = commentRepository.findById(commentId).orElseThrow(() -> new CustomException(ExceptionEnum.COMMENT_NOT_FOUND));
+
+        if (commentLikeRepository.findByMemberAndComment(member, comment) == null) {
+            comment.plusLiked();
+            commentLikeRepository.save(new CommentLike(member, comment));
+            return ResponseDto.setSuccess("댓글 좋아요 성공");
+
+        } else {
+            CommentLike commentLike = commentLikeRepository.findByMemberAndComment(member, comment);
+            comment.minusLiked();
+            commentLikeRepository.delete(commentLike);
+            return ResponseDto.setSuccess("댓글 좋아요 취소 성공");
+        }
+    }
+
+    public Comment validateExistComment(Long id) {
         return commentRepository.findById(id).orElseThrow(
-                () -> new CustomException(COMMENT_NOT_FOUND)
+                () -> new CustomException(ExceptionEnum.COMMENT_NOT_FOUND)
         );
     }
 
-    public Post isExistPost(Long id) {
+    public Post validateExistPost(Long id) {
         return postRepository.findById(id).orElseThrow(
-                () -> new CustomException(POST_NOT_FOUND)
-        );
+                () -> new CustomException(ExceptionEnum.POST_NOT_FOUND));
+
     }
 }

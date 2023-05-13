@@ -10,6 +10,7 @@ import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import org.hibernate.annotations.ColumnDefault;
 
 
 @Entity
@@ -34,8 +35,13 @@ public class Comment extends Timestamped {
     @JoinColumn(name = "post_id")
     public Post post;
 
-    public Comment(CommentRequestDto commentRequestDto) {
+    @ColumnDefault("0")
+    private int liked;
+
+    public Comment(CommentRequestDto commentRequestDto, Post post, Member member) {
         this.content = commentRequestDto.getContent();
+        this.post = post;
+        this.member = member;
     }
 
     public void setMember(Member member) {
@@ -46,7 +52,14 @@ public class Comment extends Timestamped {
         this.post = post;
     }
 
-    public void update(CommentRequestDto commentRequestDto) {
+    public void modify(CommentRequestDto commentRequestDto) {
         this.content = commentRequestDto.getContent();
+    }
+
+    public void plusLiked() {
+        liked +=  1;
+    }
+    public void minusLiked() {
+        liked -= 1;
     }
 }
