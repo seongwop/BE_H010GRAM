@@ -40,10 +40,6 @@ public class Post extends Timestamped {
     @ColumnDefault("0")
     private int postLike;
 
-    @OneToMany(mappedBy = "post", cascade = CascadeType.REMOVE)
-    @JsonBackReference
-    private List<PostLike> postLikes;
-
     public Post(PostRequestDto postRequestDto, Member member) {
         if (member.getId() == null) {
             throw new CustomException(USER_NOT_FOUND);
