@@ -10,37 +10,36 @@ import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
-
 @RestController
-@RequestMapping("/post")
+@RequestMapping("comments")
 @RequiredArgsConstructor
 public class CommentController {
 
     private final CommentService commentService;
 
-
-    //댓글 등록
-    @PostMapping("/{postId}/comments")
-    public ResponseDto<String> createComment(@PathVariable Long postId,
-                                         @Valid @RequestBody CommentRequestDto commentRequestDto,
-                                         @AuthenticationPrincipal UserDetailsImpl userDetails) {
-        return commentService.createComment(postId, commentRequestDto, userDetails.getMember());
+    @PostMapping("/{postId}")
+    public ResponseDto<CommentResponseDto> saveComment(@PathVariable Long postId,
+                                                       @Valid @RequestBody CommentRequestDto commentRequestDto,
+                                                       @AuthenticationPrincipal UserDetailsImpl userDetails) {
+        return commentService.saveComment(postId, commentRequestDto, userDetails.getMember());
     }
 
-    //댓글 수정
-    @PutMapping("/{postId}/comments/{commentId}")
-    public ResponseDto<CommentResponseDto> updateComment(@PathVariable Long commentId,
-                                                         @PathVariable Long postId,
-                                                         @Valid @RequestBody CommentRequestDto commentRequestDto,
-                                                         @AuthenticationPrincipal UserDetailsImpl userDetails) {
-        return commentService.updateComment(commentId, postId, commentRequestDto, userDetails.getMember());
+    @PutMapping("/{commentId}")
+    public ResponseDto<CommentResponseDto> modifyComment(@PathVariable Long commentId,
+                                           @Valid @RequestBody CommentRequestDto commentRequestDto,
+                                           @AuthenticationPrincipal UserDetailsImpl userDetails) {
+        return commentService.modifyComment(commentId, commentRequestDto, userDetails.getMember());
     }
 
-    //댓글 삭제
-    @DeleteMapping("/{postId}/comments/{commentId}")
-    public ResponseDto<String> deleteComment(@PathVariable Long postId,
-                                             @PathVariable Long commentId,
-                                             @AuthenticationPrincipal UserDetailsImpl userDetails) {
-        return commentService.deleteComment(postId, commentId, userDetails.getMember());
+    @DeleteMapping("/{commentId}")
+    public ResponseDto<?> deleteComment(@PathVariable Long commentId, @AuthenticationPrincipal UserDetailsImpl userDetails) {
+        return commentService.deleteComment(commentId, userDetails.getMember());
+    }
+
+    //댓글좋아요
+    @PostMapping("/likes/{commentId}")
+    public ResponseDto<?> likeComment(@PathVariable Long commentId, @AuthenticationPrincipal UserDetailsImpl userDetails) {
+
+        return commentService.likeComment(commentId, userDetails.getMember());
     }
 }
