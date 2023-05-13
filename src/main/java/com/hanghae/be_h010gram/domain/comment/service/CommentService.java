@@ -42,29 +42,33 @@ public class CommentService {
 
     //댓글 수정
     @Transactional
-    public ResponseDto<CommentResponseDto> updateComment(Long id, CommentRequestDto commentRequestDto, Member member) {
-        Comment comment = isExistComment(id);
+    public ResponseDto<CommentResponseDto> updateComment(Long commentId, Long postId, CommentRequestDto commentRequestDto, Member member) {
+        Post post = isExistPost(postId);
+        Comment comment = isExistComment(commentId);
 
         //작성자가 맞는지 확인
-        isMemberEqual(member, comment);
+        isMemberEqual(member, post);
 
+        //수정
         comment.update(commentRequestDto);
         return ResponseDto.setSuccess("댓글 수정 성공", new CommentResponseDto(comment));
     }
 
-    /**
-     * 댓글 삭제
-     */
+
+    //댓글 삭제
     @Transactional
-    public ResponseDto<?> deleteComment(Long id, Member member) {
-        Comment comment = isExistComment(id);
-        isMemberEqual(member, comment);
-        comment.getPost().getComments().remove(comment);
+    public ResponseDto<String> deleteComment(Long postId, Long commentId, Member member) {
+        Post post = isExistPost(postId);
+        Comment comment = isExistComment(commentId);
+
+        isMemberEqual(member, post);
+
+        commentRepository.deleteById(comment.getId());
         return ResponseDto.setSuccess("댓글 삭제 성공",null);
     }
 
-    public void isMemberEqual(Member member, Comment comment) {
-        if (!member.getId().equals(comment.getMember().getId())) {
+    public void isMemberEqual(Member member, Post post) {
+        if (!member.getId().equals(post.getMember().getId())) {
             throw new CustomException(ExceptionEnum.INVALID_USER);
         }
     }

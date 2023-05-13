@@ -12,7 +12,7 @@ import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
-@RequestMapping("/post/{postId}/comments")
+@RequestMapping("/post")
 @RequiredArgsConstructor
 public class CommentController {
 
@@ -20,7 +20,7 @@ public class CommentController {
 
 
     //댓글 등록
-    @PostMapping("")
+    @PostMapping("/{postId}/comments")
     public ResponseDto<String> createComment(@PathVariable Long postId,
                                          @Valid @RequestBody CommentRequestDto commentRequestDto,
                                          @AuthenticationPrincipal UserDetailsImpl userDetails) {
@@ -28,16 +28,19 @@ public class CommentController {
     }
 
     //댓글 수정
-    @PutMapping("/{commentId}")
-    public ResponseDto<CommentResponseDto> updateComment(@PathVariable Long id,
+    @PutMapping("/{postId}/comments/{commentId}")
+    public ResponseDto<CommentResponseDto> updateComment(@PathVariable Long commentId,
+                                                         @PathVariable Long postId,
                                                          @Valid @RequestBody CommentRequestDto commentRequestDto,
                                                          @AuthenticationPrincipal UserDetailsImpl userDetails) {
-        return commentService.updateComment(id, commentRequestDto, userDetails.getMember());
+        return commentService.updateComment(commentId, postId, commentRequestDto, userDetails.getMember());
     }
 
     //댓글 삭제
-    @DeleteMapping("/{commentId}")
-    public ResponseDto<?> deleteComment(@PathVariable Long id, @AuthenticationPrincipal UserDetailsImpl userDetails) {
-        return commentService.deleteComment(id, userDetails.getMember());
+    @DeleteMapping("/{postId}/comments/{commentId}")
+    public ResponseDto<String> deleteComment(@PathVariable Long postId,
+                                             @PathVariable Long commentId,
+                                             @AuthenticationPrincipal UserDetailsImpl userDetails) {
+        return commentService.deleteComment(postId, commentId, userDetails.getMember());
     }
 }
