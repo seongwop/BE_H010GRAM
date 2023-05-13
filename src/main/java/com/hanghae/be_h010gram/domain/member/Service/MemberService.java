@@ -58,8 +58,10 @@ public class MemberService {
         }
         String encodedPassword = passwordEncoder.encode(requestDto.getPassword());
 
-        memberRepository.findByEmail(requestDto.getEmail()).orElseThrow(
-                () -> new CustomException(ExceptionEnum.INVALID_USER_EXISTENCE)
+        memberRepository.findByEmail(requestDto.getEmail()).ifPresent(
+                member -> {
+                    throw new CustomException(ExceptionEnum.INVALID_USER_EXISTENCE);
+                }
         );
 
         Member member = Member.builder().email(requestDto.getEmail())
