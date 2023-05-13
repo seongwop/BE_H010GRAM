@@ -15,6 +15,8 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import static com.hanghae.be_h010gram.exception.ExceptionEnum.*;
+
 @Service
 @Transactional(readOnly = true)
 @RequiredArgsConstructor
@@ -69,19 +71,19 @@ public class CommentService {
 
     public void isMemberEqual(Member member, Post post) {
         if (!member.getId().equals(post.getMember().getId())) {
-            throw new CustomException(ExceptionEnum.INVALID_USER);
+            throw new CustomException(INVALID_USER);
         }
     }
 
     public Comment isExistComment(Long id) {
         return commentRepository.findById(id).orElseThrow(
-                () -> new CustomException(ExceptionEnum.COMMENT_NOT_FOUND)
+                () -> new CustomException(COMMENT_NOT_FOUND)
         );
     }
 
     public Post isExistPost(Long id) {
         return postRepository.findById(id).orElseThrow(
-                () -> new CustomException(ExceptionEnum.POST_NOT_FOUND)
+                () -> new CustomException(POST_NOT_FOUND)
         );
     }
 }

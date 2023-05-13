@@ -33,14 +33,14 @@ public class MemberController {
         return memberService.register(requestDto);
     }
 
-    @GetMapping("/member/{memberId}")
+    @GetMapping("/members/{memberId}")
     public ResponseDto<MemberResponseDto> getProfile (@PathVariable Long memberId, @AuthenticationPrincipal UserDetailsImpl userDetails) {
         return memberService.getProfile(memberId, userDetails.getMember());
     }
 
-    @PutMapping(value = "/member/{memberId}", consumes = {MediaType.MULTIPART_FORM_DATA_VALUE})
+    @PutMapping(value = "/members/{memberId}", consumes = {MediaType.MULTIPART_FORM_DATA_VALUE, MediaType.APPLICATION_FORM_URLENCODED_VALUE})
     public ResponseDto<String> updateProfile(@PathVariable Long memberId,
-                                             @RequestPart(value = "imageFile", required = false) ProfileRequestDto profileRequestDto,
+                                             @RequestPart(value = "profileRequestDto", required = false) ProfileRequestDto profileRequestDto,
                                              @RequestPart(value = "imageFile", required = false) MultipartFile image,
                                              @AuthenticationPrincipal UserDetailsImpl userDetails) throws IOException {
         return memberService.updateProfile(memberId, profileRequestDto, image, userDetails.getMember());

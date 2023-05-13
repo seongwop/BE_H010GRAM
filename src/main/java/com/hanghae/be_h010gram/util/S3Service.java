@@ -13,6 +13,8 @@ import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
 
+import static com.hanghae.be_h010gram.exception.ExceptionEnum.FILE_NOT_FOUND;
+
 @Service
 @RequiredArgsConstructor
 public class S3Service {
@@ -28,7 +30,6 @@ public class S3Service {
         String fileName = FileNameBuilder.buildFileName(multipartFile.getOriginalFilename());
 
         ObjectMetadata objectMetadata = new ObjectMetadata();
-        objectMetadata.setContentType(multipartFile.getContentType());
         objectMetadata.setContentLength(multipartFile.getSize());
 
         amazonS3Client.putObject(new PutObjectRequest(bucket, fileName, multipartFile.getInputStream(), objectMetadata)
@@ -51,7 +52,7 @@ public class S3Service {
     //파일 유 / 무 확인 메서드
     private void validateFileExists(MultipartFile multipartFile) {
         if (multipartFile.isEmpty()) {
-            throw new CustomException(ExceptionEnum.FILE_NOT_FOUND);
+            throw new CustomException(FILE_NOT_FOUND);
         }
     }
 }
