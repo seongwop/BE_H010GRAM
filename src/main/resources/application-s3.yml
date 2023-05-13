@@ -1,0 +1,17 @@
+cloud:
+  aws:
+    s3:
+      bucket: h010gram-s3-bucket
+    stack:
+      auto: false
+    region:
+      static: ap-northeast-2
+    credentials:
+      access-key: AKIA6DLGUIKSG7PKW3UO
+      secret-key: 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
+
+spring:
+  servlet:
+    multipart:
+      max-file-size: 10MB
+      max-request-size: 10MB
