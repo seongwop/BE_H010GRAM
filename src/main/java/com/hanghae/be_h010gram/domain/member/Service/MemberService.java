@@ -1,6 +1,7 @@
 package com.hanghae.be_h010gram.domain.member.Service;
 
-import com.hanghae.be_h010gram.domain.member.dto.LoginRequestDto;
+
+import com.hanghae.be_h010gram.domain.member.dto.MemberRequestDto;
 import com.hanghae.be_h010gram.domain.member.dto.MemberResponseDto;
 import com.hanghae.be_h010gram.domain.member.dto.ProfileRequestDto;
 import com.hanghae.be_h010gram.domain.member.entity.Member;
@@ -29,7 +30,7 @@ public class MemberService {
     private final S3Service s3Service;
 
     @Transactional
-    public ResponseDto<String> login(LoginRequestDto loginRequestDto, HttpServletResponse response) {
+    public ResponseDto<String> login(MemberRequestDto.Login loginRequestDto, HttpServletResponse response) {
         String email = loginRequestDto.getEmail();
         String password = loginRequestDto.getPassword();
 
@@ -50,8 +51,28 @@ public class MemberService {
         return ResponseDto.setSuccess("로그인 성공");
     }
 
+    @Transactional
+    public ResponseDto<?> register(MemberRequestDto.Register requestDto) {
+        if (!requestDto.getPassword().equals(requestDto.getCheckPassword())) {
+            throw new CustomException(ExceptionEnum.INVALID_USER_PASSWORD);
+        }
+        String encodedPassword = passwordEncoder.encode(requestDto.getPassword());
+
+        memberRepository.findByEmail(requestDto.getEmail()).orElseThrow(
+                () -> new CustomException(ExceptionEnum.INVALID_USER_EXISTENCE)
+        );
+
+        Member member = Member.builder().email(requestDto.getEmail())
+                .password(encodedPassword)
+                .nickname(requestDto.getNickname())
+                .build();
+
+        memberRepository.saveAndFlush(member);
+        return ResponseDto.setSuccess("회원가입 성공", new MemberResponseDto(member));
+    }
+
     @Transactional(readOnly = true)
-    public ResponseDto<MemberResponseDto> getProfil(Long memberId, Member member) {
+    public ResponseDto<MemberResponseDto> getProfile(Long memberId, Member member) {
         //현재 로그인 멤버 조회
         Member loginMember = findMember(memberId);
 
