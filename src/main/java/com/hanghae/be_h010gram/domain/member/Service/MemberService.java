@@ -53,7 +53,14 @@ public class MemberService {
 
     @Transactional
     public ResponseDto<?> register(MemberRequestDto.Register requestDto) {
+        if (!requestDto.getPassword().equals(requestDto.getCheckPassword())) {
+            throw new CustomException(ExceptionEnum.INVALID_USER_PASSWORD);
+        }
         String encodedPassword = passwordEncoder.encode(requestDto.getPassword());
+
+        memberRepository.findByEmail(requestDto.getEmail()).orElseThrow(
+                () -> new CustomException(ExceptionEnum.INVALID_USER_EXISTENCE)
+        );
 
         Member member = Member.builder().email(requestDto.getEmail())
                 .password(encodedPassword)

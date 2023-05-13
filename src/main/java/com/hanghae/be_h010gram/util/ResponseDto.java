@@ -20,4 +20,7 @@ public class ResponseDto<T> {
         return ResponseDto.set(message, null);
     }
 
+    public static <T> ResponseDto<T> sendMessage(String message) {
+        return ResponseDto.set(message, null);
+    }
 }
