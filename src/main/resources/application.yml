@@ -1,11 +1,6 @@
 spring:
-  h2:
-    console:
-      enabled: 'true'
-  datasource:
-    username: sa
-    url: jdbc:h2:mem:db;MODE=MYSQL;
-    password: ''
+  profiles:
+    include: 'secret'
   thymeleaf:
     cache: 'false'
   jpa:
@@ -14,6 +9,6 @@ spring:
         format_sql: 'true'
         use_sql_comments: 'true'
         show_sql: 'true'
-jwt:
-  secret:
-    key: 7ZWt7ZW0OTntmZTsnbTtjIXtlZzqta3snYTrhIjrqLjshLjqs4TroZzrgpjslYTqsIDsnpDtm4zrpa3tlZzqsJzrsJzsnpDrpbzrp4zrk6TslrTqsIDsnpA=
+
+
+

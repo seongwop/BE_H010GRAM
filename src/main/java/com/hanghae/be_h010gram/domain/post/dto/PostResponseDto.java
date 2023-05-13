@@ -1,5 +1,6 @@
 package com.hanghae.be_h010gram.domain.post.dto;
 
+import com.hanghae.be_h010gram.domain.comment.entity.Comment;
 import com.hanghae.be_h010gram.domain.member.entity.Member;
 import com.hanghae.be_h010gram.domain.post.entity.Post;
 import lombok.Getter;

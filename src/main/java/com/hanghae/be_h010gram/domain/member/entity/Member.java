@@ -15,16 +15,24 @@ public class Member {
     @Column(name = "MEMBER_ID")
     private Long Id;
 
-    @Column
+    @Column(nullable = false, unique = true)
     private String email;
 
-    @Column
+    @Column(nullable = false)
     private String nickname;
 
-    @Column
+    @Column(nullable = false)
     private String password;
 
     @Column(columnDefinition = "LONGTEXT")
     @Lob
     private String profileImage;
+
+    @Builder
+    private Member(String email, String nickname, String password, String profileImage) {
+        this.email = email;
+        this.nickname = nickname;
+        this.password = password;
+        this.profileImage = profileImage;
+    }
 }

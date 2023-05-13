@@ -1,6 +1,7 @@
 package com.hanghae.be_h010gram.domain.post.entity;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.hanghae.be_h010gram.domain.comment.entity.Comment;
 import com.hanghae.be_h010gram.domain.member.entity.Member;
 import com.hanghae.be_h010gram.domain.post.dto.PostRequestDto;
 import com.hanghae.be_h010gram.exception.CustomException;
@@ -38,10 +39,6 @@ public class Post extends Timestamped {
 
     @ColumnDefault("0")
     private int postLike;
-
-    @OneToMany(mappedBy = "post", cascade = CascadeType.REMOVE)
-    @JsonBackReference
-    private List<PostLike> postLikes;
 
     public Post(PostRequestDto postRequestDto, Member member) {
         if (member.getId() == null) {
