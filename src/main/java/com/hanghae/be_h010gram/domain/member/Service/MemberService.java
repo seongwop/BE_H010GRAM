@@ -52,14 +52,16 @@ public class MemberService {
     }
 
     @Transactional
-    public ResponseDto<?> register(MemberRequestDto.Register requestDto) {
+    public ResponseDto<String> register(MemberRequestDto.Register requestDto) {
         if (!requestDto.getPassword().equals(requestDto.getCheckPassword())) {
             throw new CustomException(ExceptionEnum.INVALID_USER_PASSWORD);
         }
         String encodedPassword = passwordEncoder.encode(requestDto.getPassword());
 
-        memberRepository.findByEmail(requestDto.getEmail()).orElseThrow(
-                () -> new CustomException(ExceptionEnum.INVALID_USER_EXISTENCE)
+        memberRepository.findByEmail(requestDto.getEmail()).ifPresent(
+                member -> {
+                    throw new CustomException(ExceptionEnum.INVALID_USER_EXISTENCE);
+                }
         );
 
         Member member = Member.builder().email(requestDto.getEmail())
@@ -68,13 +70,13 @@ public class MemberService {
                 .build();
 
         memberRepository.saveAndFlush(member);
-        return ResponseDto.setSuccess("회원가입 성공", new MemberResponseDto(member));
+        return ResponseDto.setSuccess("회원가입 성공");
     }
 
     @Transactional(readOnly = true)
     public ResponseDto<MemberResponseDto> getProfile(Long memberId, Member member) {
         //현재 로그인 멤버 조회
-        Member loginMember = findMember(memberId);
+        Member loginMember = isExistMember(memberId);
 
         //로그인된 멤버와 토큰 정보의 멤버가 동일한지 확인
         isMemberEqual(member.getId(), loginMember.getId());
@@ -88,7 +90,7 @@ public class MemberService {
     public ResponseDto<String> updateProfile(Long memberId, ProfileRequestDto profileRequestDto,
                                              MultipartFile image, Member member) throws IOException {
         //회원 조회
-        Member updateMember = findMember(memberId);
+        Member updateMember = isExistMember(memberId);
 
         //로그인된 멤버와 토큰 정보의 멤버가 동일한지 확인
         isMemberEqual(member.getId(), updateMember.getId());
@@ -108,7 +110,7 @@ public class MemberService {
         return ResponseDto.setSuccess("success");
     }
 
-    public Member findMember(Long id) {
+    public Member isExistMember(Long id) {
         return memberRepository.findById(id).orElseThrow(() -> new CustomException(ExceptionEnum.USER_NOT_FOUND));
     }
 
