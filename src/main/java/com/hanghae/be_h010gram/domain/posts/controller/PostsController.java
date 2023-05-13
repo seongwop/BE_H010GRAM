@@ -42,7 +42,7 @@ public class PostsController {
 
     // 삭제
     @DeleteMapping("/post/{id}")
-    public ResponseDto<PostsResponseDto> deletePost(@PathVariable Long id, @AuthenticationPrincipal UserDetailsImpl userDetails) {
+    public ResponseDto<?> deletePost(@PathVariable Long id, @AuthenticationPrincipal UserDetailsImpl userDetails) {
         return postsService.deletePost(id, userDetails.getMember());
     }
 

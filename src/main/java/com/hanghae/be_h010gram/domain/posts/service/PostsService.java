@@ -67,7 +67,7 @@ public class PostsService {
 
     // 게시물 삭제
     @Transactional
-    public ResponseDto<PostsResponseDto> deletePost(Long id, Members members) {
+    public ResponseDto<?> deletePost(Long id, Members members) {
         Posts posts = postsRepository.findById(id).orElseThrow(
                 () -> new CustomException(POST_NOT_FOUND)
         );
