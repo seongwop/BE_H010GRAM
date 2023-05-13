@@ -1,10 +1,10 @@
 package com.hanghae.be_h010gram.domain.post.service;
 
 import com.hanghae.be_h010gram.domain.member.entity.Member;
+import com.hanghae.be_h010gram.domain.member.repository.MemberRepository;
 import com.hanghae.be_h010gram.domain.post.dto.PostRequestDto;
 import com.hanghae.be_h010gram.domain.post.dto.PostResponseDto;
 import com.hanghae.be_h010gram.domain.post.entity.Post;
-import com.hanghae.be_h010gram.domain.post.repository.PostLikeRepository;
 import com.hanghae.be_h010gram.domain.post.repository.PostRepository;
 import com.hanghae.be_h010gram.exception.CustomException;
 import com.hanghae.be_h010gram.util.ResponseDto;
@@ -23,8 +23,8 @@ import static com.hanghae.be_h010gram.exception.ExceptionEnum.POST_NOT_FOUND;
 public class PostService {
 
     private final PostRepository postRepository;
-    private final PostLikeRepository postLikeRepository;
-//    private final MemberRepository memberRepository;
+//    private final PostLikeRepository postLikeRepository;
+    private final MemberRepository memberRepository;
 
     // 전체 게시물 목록 조회
     @Transactional(readOnly = true)
@@ -74,7 +74,7 @@ public class PostService {
                 () -> new CustomException(POST_NOT_FOUND)
         );
         if (post.getMember().getId().equals(member.getId())) {
-            postLikeRepository.deleteById(id);
+//            postLikeRepository.deleteById(id);
             postRepository.delete(post);
             return ResponseDto.setSuccess("게시글 삭제 성공", null);
         } else {
@@ -84,8 +84,8 @@ public class PostService {
 
 //    // 좋아요
 //    @Transactional
-//    public ResponseDto<> updateLike(Long id) {
-//        Post posts = postRepository.findById(id).orElseThrow(
+//    public ResponseDto<?> updateLike(Long id) {
+//        Post post = postRepository.findById(id).orElseThrow(
 //                () -> new CustomException(POST_NOT_FOUND)
 //        );
 //
@@ -94,17 +94,16 @@ public class PostService {
 //                () -> new CustomException(INVALID_USER)
 //        );
 //
-//        if (postLikeRepository.findByPostAndUser(post, user) == null) {
-//            postLikeRepository.save(new PostLike(post, user));
+//        if (postLikeRepository.findByPostAndUser(post, member) == null) {
+//            postLikeRepository.save(new PostLike(post, member));
 //            post.updateLike(true);
 //            return ResponseDto.setSuccess("좋아요 성공");
 //        } else {
-//            PostLike postLike = postLikeRepository.findByPostAndUser(post, user);
+//            PostLike postLike = postLikeRepository.findByPostAndUser(post, member);
 //            postLikeRepository.delete(postLike);
 //            post.updateLike(false);
 //            return ResponseDto.setSuccess("좋아요 취소");
 //        }
-//
 //    }
 
 }

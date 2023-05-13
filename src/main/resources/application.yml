@@ -1,4 +1,6 @@
 spring:
+  profiles:
+    include: secret, s3
   thymeleaf:
     cache: 'false'
   jpa:

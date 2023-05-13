@@ -37,8 +37,8 @@ public class Post extends Timestamped {
     @JsonBackReference
     private List<Comment> comments;
 
-    @ColumnDefault("0")
-    private int postLike;
+//    @ColumnDefault("0")
+//    private int postLike;
 
     public Post(PostRequestDto postRequestDto, Member member) {
         if (member.getId() == null) {
@@ -57,8 +57,8 @@ public class Post extends Timestamped {
         this.content = postRequestDto.getContent();
     }
 
-    public void updateLike(boolean likeOrDislike) {
-        this.postLike = likeOrDislike ? this.postLike + 1 : this.postLike - 1;
-    }
+//    public void updateLike(boolean likeOrDislike) {
+//        this.postLike = likeOrDislike ? this.postLike + 1 : this.postLike - 1;
+//    }
 
 }

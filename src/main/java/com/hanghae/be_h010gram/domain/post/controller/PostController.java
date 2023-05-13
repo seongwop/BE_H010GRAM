@@ -46,4 +46,10 @@ public class PostController {
         return postService.deletePost(id, userDetails.getMember());
     }
 
+//    // 좋아요
+//    @PostMapping("/posts/likes/{id}")
+//    public ResponseDto<PostResponseDto> updateLike(@PathVariable Long id) {
+//        return postService.updateLike(id);
+//    }
+
 }
