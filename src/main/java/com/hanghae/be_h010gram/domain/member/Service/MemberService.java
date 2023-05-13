@@ -1,6 +1,7 @@
 package com.hanghae.be_h010gram.domain.member.Service;
 
 import com.hanghae.be_h010gram.domain.member.dto.LoginRequestDto;
+import com.hanghae.be_h010gram.domain.member.dto.MemberRequestDto;
 import com.hanghae.be_h010gram.domain.member.dto.MemberResponseDto;
 import com.hanghae.be_h010gram.domain.member.entity.Member;
 import com.hanghae.be_h010gram.domain.member.repository.MemberRepository;
@@ -26,7 +27,7 @@ public class MemberService {
     private final JwtUtil jwtUtil;
 
     @Transactional
-    public ResponseDto<String> login(LoginRequestDto loginRequestDto, HttpServletResponse response) {
+    public ResponseDto<String> login(MemberRequestDto.Login loginRequestDto, HttpServletResponse response) {
         String email = loginRequestDto.getEmail();
         String password = loginRequestDto.getPassword();
 
@@ -47,8 +48,21 @@ public class MemberService {
         return ResponseDto.setSuccess("로그인 성공");
     }
 
+    @Transactional
+    public ResponseDto<?> register(MemberRequestDto.Register requestDto) {
+        String encodedPassword = passwordEncoder.encode(requestDto.getPassword());
+
+        Member member = Member.builder().email(requestDto.getEmail())
+                .password(encodedPassword)
+                .nickname(requestDto.getNickname())
+                .build();
+
+        memberRepository.saveAndFlush(member);
+        return ResponseDto.setSuccess("회원가입 성공", new MemberResponseDto(member));
+    }
+
     @Transactional(readOnly = true)
-    public ResponseDto<MemberResponseDto> getProfil(Long memberId, Member member) {
+    public ResponseDto<MemberResponseDto> getProfile(Long memberId, Member member) {
         //현재 로그인 멤버 조회
         Member loginMember = memberRepository.findById(memberId).orElseThrow(
                 () -> new CustomException(ExceptionEnum.USER_NOT_FOUND)
@@ -64,6 +78,4 @@ public class MemberService {
         MemberResponseDto memberResponseDto = new MemberResponseDto(member);
         return ResponseDto.setSuccess("success", memberResponseDto);
     }
-
-
 }
