@@ -22,14 +22,14 @@ import static com.hanghae.be_h010gram.exception.ExceptionEnum.USER_NOT_FOUND;
 public class Post extends Timestamped {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "post_id")
+    @Column(name = "POST_ID")
     private Long id;
 
     @Column(nullable = false)
     private String content;
 
     @ManyToOne
-    @JoinColumn(name = "member_id")
+    @JoinColumn(name = "MEMBER_ID")
     private Member member;
 
     @OneToMany(mappedBy = "post", cascade = CascadeType.REMOVE)

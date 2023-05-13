@@ -3,7 +3,6 @@ package com.hanghae.be_h010gram.util;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
-import org.springframework.http.HttpStatus;
 
 @Getter
 @AllArgsConstructor(staticName = "set")

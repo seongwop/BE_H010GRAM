@@ -1,6 +1,6 @@
 spring:
   profiles:
-    include: 'secret'
+    include: secret, s3
   thymeleaf:
     cache: 'false'
   jpa:
@@ -9,6 +9,3 @@ spring:
         format_sql: 'true'
         use_sql_comments: 'true'
         show_sql: 'true'
-
-
-
