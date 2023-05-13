@@ -29,7 +29,7 @@ public class MemberController {
     }
 
     @PostMapping("/register")
-    public ResponseDto<?> register(@Valid @RequestBody MemberRequestDto.Register requestDto) {
+    public ResponseDto<String> register(@Valid @RequestBody MemberRequestDto.Register requestDto) {
         return memberService.register(requestDto);
     }
 
