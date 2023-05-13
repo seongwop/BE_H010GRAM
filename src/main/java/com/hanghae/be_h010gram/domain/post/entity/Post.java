@@ -1,6 +1,7 @@
 package com.hanghae.be_h010gram.domain.post.entity;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.hanghae.be_h010gram.domain.comments.entity.Comment;
 import com.hanghae.be_h010gram.domain.member.entity.Member;
 import com.hanghae.be_h010gram.domain.post.dto.PostRequestDto;
 import com.hanghae.be_h010gram.exception.CustomException;
