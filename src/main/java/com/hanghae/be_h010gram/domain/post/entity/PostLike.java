@@ -17,16 +17,16 @@ public class PostLike {
     @ManyToOne
     @JsonManagedReference
     @JoinColumn(nullable = false)
-    private Member members;
+    private Member member;
 
     @ManyToOne
     @JsonManagedReference
     @JoinColumn(name = "post_id", nullable = false)
-    private Post posts;
+    private Post post;
 
     public PostLike(Post post, Member members) {
-        this.posts = post;
-        this.members = members;
+        this.post = post;
+        this.member = members;
     }
 
 }
