@@ -1,7 +1,7 @@
-package com.hanghae.be_h010gram.domain.comments.entity;
+package com.hanghae.be_h010gram.domain.comment.entity;
 
 
-import com.hanghae.be_h010gram.domain.comments.dto.CommentRequestDto;
+import com.hanghae.be_h010gram.domain.comment.dto.CommentRequestDto;
 import com.hanghae.be_h010gram.domain.member.entity.Member;
 import com.hanghae.be_h010gram.domain.post.entity.Post;
 import com.hanghae.be_h010gram.util.Timestamped;
@@ -34,13 +34,19 @@ public class Comment extends Timestamped {
     @JoinColumn(name = "post_id")
     public Post post;
 
-    public Comment(CommentRequestDto commentRequestDto, Post post, Member member) {
+    public Comment(CommentRequestDto commentRequestDto) {
         this.content = commentRequestDto.getContent();
-        this.post = post;
+    }
+
+    public void setMember(Member member) {
         this.member = member;
     }
 
-    public void modify(CommentRequestDto commentRequestDto) {
+    public void setPost(Post post) {
+        this.post = post;
+    }
+
+    public void update(CommentRequestDto commentRequestDto) {
         this.content = commentRequestDto.getContent();
     }
 }

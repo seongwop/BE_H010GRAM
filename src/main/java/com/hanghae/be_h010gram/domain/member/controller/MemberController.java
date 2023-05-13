@@ -20,13 +20,14 @@ import java.io.IOException;
 @RequiredArgsConstructor
 public class MemberController {
     private final MemberService memberService;
+
     @PostMapping("/login")
     public ResponseDto<String> login(@RequestBody MemberRequestDto.Login loginRequestDto, HttpServletResponse response) {
         return memberService.login(loginRequestDto, response);
     }
 
     @PostMapping("/register")
-    public ResponseDto<?> register(@Valid @RequestBody MemberRequestDto.Register requestDto) {
+    public ResponseDto<String> register(@Valid @RequestBody MemberRequestDto.Register requestDto) {
         return memberService.register(requestDto);
     }
 
