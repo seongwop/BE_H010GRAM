@@ -21,6 +21,8 @@ import org.springframework.web.multipart.MultipartFile;
 import java.io.IOException;
 import java.util.Objects;
 
+import static com.hanghae.be_h010gram.exception.ExceptionEnum.*;
+
 @Service
 @RequiredArgsConstructor
 public class MemberService {
@@ -36,12 +38,12 @@ public class MemberService {
 
         //멤버 조회
         Member member = memberRepository.findByEmail(email).orElseThrow(
-                () -> new CustomException(ExceptionEnum.USER_NOT_FOUND)
+                () -> new CustomException(USER_NOT_FOUND)
         );
 
         //비밀번호 확인
         if (!passwordEncoder.matches(password, member.getPassword())) {
-            throw new CustomException(ExceptionEnum.INVALID_USER_PASSWORD);
+            throw new CustomException(INVALID_USER_PASSWORD);
         }
 
         //토큰 생성 및 헤더 반환
@@ -54,13 +56,13 @@ public class MemberService {
     @Transactional
     public ResponseDto<String> register(MemberRequestDto.Register requestDto) {
         if (!requestDto.getPassword().equals(requestDto.getCheckPassword())) {
-            throw new CustomException(ExceptionEnum.INVALID_USER_PASSWORD);
+            throw new CustomException(INVALID_USER_PASSWORD);
         }
         String encodedPassword = passwordEncoder.encode(requestDto.getPassword());
 
         memberRepository.findByEmail(requestDto.getEmail()).ifPresent(
                 member -> {
-                    throw new CustomException(ExceptionEnum.INVALID_USER_EXISTENCE);
+                    throw new CustomException(INVALID_USER_EXISTENCE);
                 }
         );
 
@@ -117,7 +119,7 @@ public class MemberService {
     public void isMemberEqual(Long pathMemberId, Long tokenMemberId) {
         if (!Objects.equals(pathMemberId, tokenMemberId)) {
             //토큰의 정보가 유효하지 않아서 실패
-            throw new CustomException(ExceptionEnum.INVALID_AUTH_TOKEN);
+            throw new CustomException(INVALID_AUTH_TOKEN);
         }
     }
 }
