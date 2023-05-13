@@ -1,9 +1,11 @@
 package com.hanghae.be_h010gram.domain.post.service;
 
 import com.hanghae.be_h010gram.domain.member.entity.Member;
+import com.hanghae.be_h010gram.domain.member.repository.MemberRepository;
 import com.hanghae.be_h010gram.domain.post.dto.PostRequestDto;
 import com.hanghae.be_h010gram.domain.post.dto.PostResponseDto;
 import com.hanghae.be_h010gram.domain.post.entity.Post;
+import com.hanghae.be_h010gram.domain.post.entity.PostLike;
 import com.hanghae.be_h010gram.domain.post.repository.PostLikeRepository;
 import com.hanghae.be_h010gram.domain.post.repository.PostRepository;
 import com.hanghae.be_h010gram.exception.CustomException;
@@ -24,7 +26,7 @@ public class PostService {
 
     private final PostRepository postRepository;
     private final PostLikeRepository postLikeRepository;
-//    private final MemberRepository memberRepository;
+    private final MemberRepository memberRepository;
 
     // 전체 게시물 목록 조회
     @Transactional(readOnly = true)
@@ -82,29 +84,27 @@ public class PostService {
         }
     }
 
-//    // 좋아요
-//    @Transactional
-//    public ResponseDto<> updateLike(Long id) {
-//        Post posts = postRepository.findById(id).orElseThrow(
-//                () -> new CustomException(POST_NOT_FOUND)
-//        );
-//
-//        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-//        Member member = memberRepository.findById(id)).orElseThrow(
-//                () -> new CustomException(INVALID_USER)
-//        );
-//
-//        if (postLikeRepository.findByPostAndUser(post, user) == null) {
-//            postLikeRepository.save(new PostLike(post, user));
-//            post.updateLike(true);
-//            return ResponseDto.setSuccess("좋아요 성공");
-//        } else {
-//            PostLike postLike = postLikeRepository.findByPostAndUser(post, user);
-//            postLikeRepository.delete(postLike);
-//            post.updateLike(false);
-//            return ResponseDto.setSuccess("좋아요 취소");
-//        }
-//
-//    }
+    // 좋아요
+    @Transactional
+    public ResponseDto<?> updateLike(Long id, Member member) {
+        Post post = postRepository.findById(id).orElseThrow(
+                () -> new CustomException(POST_NOT_FOUND)
+        );
+
+        member = memberRepository.findById(member.getId()).orElseThrow(
+                () -> new CustomException(INVALID_USER)
+        );
+
+        if (postLikeRepository.findByPostAndMember(post, member) == null) {
+            postLikeRepository.save(new PostLike(post, member));
+            post.updateLike(true);
+            return ResponseDto.setSuccess("좋아요 성공");
+        } else {
+            PostLike postLike = postLikeRepository.findByPostAndMember(post, member);
+            postLikeRepository.delete(postLike);
+            post.updateLike(false);
+            return ResponseDto.setSuccess("좋아요 취소");
+        }
+    }
 
 }

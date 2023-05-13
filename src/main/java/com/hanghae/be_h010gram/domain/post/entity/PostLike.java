@@ -1,6 +1,5 @@
 package com.hanghae.be_h010gram.domain.post.entity;
 
-import com.fasterxml.jackson.annotation.JsonManagedReference;
 import com.hanghae.be_h010gram.domain.member.entity.Member;
 import jakarta.persistence.*;
 import lombok.Getter;
@@ -15,16 +14,16 @@ public class PostLike {
     private Long id;
 
     @ManyToOne
-    @JoinColumn(nullable = false)
+    @JoinColumn(name = "MEMBER_ID", nullable = false)
     private Member member;
 
     @ManyToOne
-    @JoinColumn(name = "post_id", nullable = false)
+    @JoinColumn(name = "POST_ID", nullable = false)
     private Post post;
 
-    public PostLike(Post post, Member members) {
+    public PostLike(Post post, Member member) {
         this.post = post;
-        this.member = members;
+        this.member = member;
     }
 
 }
