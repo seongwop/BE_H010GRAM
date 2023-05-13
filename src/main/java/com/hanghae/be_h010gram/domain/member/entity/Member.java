@@ -1,9 +1,6 @@
 package com.hanghae.be_h010gram.domain.member.entity;
 
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
-import jakarta.persistence.Id;
-import jakarta.persistence.Lob;
+import jakarta.persistence.*;
 import lombok.*;
 
 @Entity
@@ -14,7 +11,9 @@ import lombok.*;
 @Builder
 public class Member {
     @Id
-    private String memberId;
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "MEMBER_ID")
+    private Long Id;
 
     @Column
     private String email;
@@ -27,5 +26,5 @@ public class Member {
 
     @Column(columnDefinition = "LONGTEXT")
     @Lob
-    private String img;
+    private String profileImage;
 }
