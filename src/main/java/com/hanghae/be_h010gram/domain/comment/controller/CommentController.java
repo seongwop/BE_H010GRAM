@@ -31,7 +31,7 @@ public class CommentController {
 
     //댓글 리스트 전체조회
     @GetMapping("/{commentslist}")
-    public List<ResponseDto<CommentResponseDto>> getAllComments() {return commentService.getAllComments(); }
+    public ResponseDto<List<CommentResponseDto>> getAllComments() {return commentService.getAllComments(); }
 
     //댓글 수정
     @PutMapping("/{commentId}")

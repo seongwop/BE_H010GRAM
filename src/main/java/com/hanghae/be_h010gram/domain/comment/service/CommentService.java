@@ -25,6 +25,7 @@ import java.util.stream.Collectors;
 @RequiredArgsConstructor
 @Slf4j
 public class CommentService {
+
     private final PostRepository postRepository;
     private final CommentRepository commentRepository;
     private final CommentLikeRepository commentLikeRepository;
@@ -39,18 +40,16 @@ public class CommentService {
         Comment comment = commentRepository.save(new Comment(commentRequestDto, post, member));
         return ResponseDto.setSuccess("댓글 등록 성공",new CommentResponseDto(comment));
     }
+
     /**
-     * 댓글 등록
+     * 댓글 전체 조회
      */
 
-    @Transactional(readOnly = true)
-    public List<ResponseDto<CommentResponseDto>> getAllComments() {
-        return commentRepository
+    public ResponseDto<List<CommentResponseDto>> getAllComments() {
+
+        return ResponseDto.setSuccess("댓글 전체 조회 성공",commentRepository
                 .findAllByOrderByCreatedAtDesc()
-                .stream()
-                .map(comment -> ResponseDto
-                        .setSuccess("전체 댓글 목록 조회 성공", new CommentResponseDto(comment)))
-                .collect(Collectors.toList());
+                .stream().map(CommentResponseDto::new).collect(Collectors.toList()));
     }
 
     /**
