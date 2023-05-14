@@ -1,6 +1,7 @@
 package com.hanghae.be_h010gram.domain.post.entity;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import com.hanghae.be_h010gram.domain.comment.entity.Comment;
 import com.hanghae.be_h010gram.domain.member.entity.Member;
 import com.hanghae.be_h010gram.domain.post.dto.PostRequestDto;
@@ -34,7 +35,7 @@ public class Post extends Timestamped {
 
     @OneToMany(mappedBy = "post", cascade = CascadeType.REMOVE)
     @OrderBy("id asc")
-    @JsonBackReference
+    @JsonManagedReference
     private List<Comment> comments;
 
     @ColumnDefault("0")

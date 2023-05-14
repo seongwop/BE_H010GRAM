@@ -1,6 +1,7 @@
 package com.hanghae.be_h010gram.domain.comment.entity;
 
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.hanghae.be_h010gram.domain.comment.dto.CommentRequestDto;
 import com.hanghae.be_h010gram.domain.member.entity.Member;
 import com.hanghae.be_h010gram.domain.post.entity.Post;
@@ -33,6 +34,7 @@ public class Comment extends Timestamped {
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "post_id")
+    @JsonBackReference
     public Post post;
 
     @ColumnDefault("0")
