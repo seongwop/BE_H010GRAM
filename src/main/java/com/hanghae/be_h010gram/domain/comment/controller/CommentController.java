@@ -10,6 +10,10 @@ import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
+
+
 @RestController
 @RequestMapping("comments")
 @RequiredArgsConstructor
@@ -17,6 +21,7 @@ public class CommentController {
 
     private final CommentService commentService;
 
+    //댓글 등록
     @PostMapping("/{postId}")
     public ResponseDto<CommentResponseDto> saveComment(@PathVariable Long postId,
                                                        @Valid @RequestBody CommentRequestDto commentRequestDto,
@@ -24,6 +29,11 @@ public class CommentController {
         return commentService.saveComment(postId, commentRequestDto, userDetails.getMember());
     }
 
+    //댓글 리스트 전체조회
+    @GetMapping("/{commentslist}")
+    public List<ResponseDto<CommentResponseDto>> getAllComments() {return commentService.getAllComments(); }
+
+    //댓글 수정
     @PutMapping("/{commentId}")
     public ResponseDto<CommentResponseDto> modifyComment(@PathVariable Long commentId,
                                            @Valid @RequestBody CommentRequestDto commentRequestDto,
@@ -31,6 +41,7 @@ public class CommentController {
         return commentService.modifyComment(commentId, commentRequestDto, userDetails.getMember());
     }
 
+    //댓글 삭제
     @DeleteMapping("/{commentId}")
     public ResponseDto<?> deleteComment(@PathVariable Long commentId, @AuthenticationPrincipal UserDetailsImpl userDetails) {
         return commentService.deleteComment(commentId, userDetails.getMember());

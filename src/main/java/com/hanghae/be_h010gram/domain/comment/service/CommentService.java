@@ -17,6 +17,9 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.List;
+import java.util.stream.Collectors;
+
 @Service
 @Transactional(readOnly = true)
 @RequiredArgsConstructor
@@ -35,6 +38,19 @@ public class CommentService {
 
         Comment comment = commentRepository.save(new Comment(commentRequestDto, post, member));
         return ResponseDto.setSuccess("댓글 등록 성공",new CommentResponseDto(comment));
+    }
+    /**
+     * 댓글 등록
+     */
+
+    @Transactional(readOnly = true)
+    public List<ResponseDto<CommentResponseDto>> getAllComments() {
+        return commentRepository
+                .findAllByOrderByCreatedAtDesc()
+                .stream()
+                .map(comment -> ResponseDto
+                        .setSuccess("전체 댓글 목록 조회 성공", new CommentResponseDto(comment)))
+                .collect(Collectors.toList());
     }
 
     /**

@@ -9,7 +9,7 @@ import java.util.List;
 
 @Getter
 public class PostResponseDto {
-//    private Long id;
+    private Long id;
     private String content;
     private String nickname;
     private LocalDateTime createdAt;
@@ -18,7 +18,7 @@ public class PostResponseDto {
     private int like;
 
     public PostResponseDto(Post post) {
-//        this.id = post.getId();
+        this.id = post.getId();
         this.content = post.getContent();
         this.nickname = post.getMember().getNickname();
         this.createdAt = post.getCreatedAt();
