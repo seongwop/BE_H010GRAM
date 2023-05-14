@@ -27,12 +27,13 @@ public class PostService {
 
     // 전체 게시물 목록 조회
     @Transactional(readOnly = true)
-    public List<ResponseDto<PostResponseDto>> getAllPosts() {
-        return postRepository
+    public ResponseDto<List<PostResponseDto>> getAllPosts() {
+        List<PostResponseDto> postResponseDtos = postRepository
                 .findAllByOrderByCreatedAtDesc()
                 .stream()
-                .map(post -> ResponseDto.setSuccess("전체 게시물 목록 조회 성공", new PostResponseDto(post)))
+                .map(PostResponseDto::new)
                 .collect(Collectors.toList());
+        return ResponseDto.setSuccess("전체 게시물 조회 성공", postResponseDtos);
     }
 
     // 선택한 게시물 상세 조회
