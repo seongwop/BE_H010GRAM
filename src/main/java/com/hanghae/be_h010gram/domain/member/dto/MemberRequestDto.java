@@ -21,6 +21,7 @@ public class MemberRequestDto{
         private String password;
         @NotBlank
         private String checkPassword;
+        @NotBlank
         private String nickname;
     }
 }
