@@ -24,9 +24,7 @@ public class CommentResponseDto {
     }
 
     public static List<CommentResponseDto> ofList(List<Comment> comments) {
-        return comments.stream()
-                .map(comment -> new CommentResponseDto(comment))
-                .collect(Collectors.toList());
+        return comments.stream().map(CommentResponseDto::new).collect(Collectors.toList());
     }
 }
 //    private boolean likeStatus;

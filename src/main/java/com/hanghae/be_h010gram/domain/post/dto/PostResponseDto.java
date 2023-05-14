@@ -1,21 +1,19 @@
 package com.hanghae.be_h010gram.domain.post.dto;
 
 import com.hanghae.be_h010gram.domain.comment.dto.CommentResponseDto;
-import com.hanghae.be_h010gram.domain.comment.entity.Comment;
 import com.hanghae.be_h010gram.domain.post.entity.Post;
 import lombok.Getter;
 
 import java.time.LocalDateTime;
 import java.util.List;
-import java.util.stream.Collectors;
 
 @Getter
 public class PostResponseDto {
-//    private Long id;
+    //    private Long id;
     private String content;
     private String nickname;
     private LocalDateTime createdAt;
-//    private LocalDateTime modifiedAt;
+    //    private LocalDateTime modifiedAt;
     private List<CommentResponseDto> comment;
     private int like;
 
