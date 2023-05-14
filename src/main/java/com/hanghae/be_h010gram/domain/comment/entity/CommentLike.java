@@ -1,7 +1,6 @@
-package com.hanghae.be_h010gram.domain.like.entity;
+package com.hanghae.be_h010gram.domain.comment.entity;
 
 
-import com.hanghae.be_h010gram.domain.comment.entity.Comment;
 import com.hanghae.be_h010gram.domain.member.entity.Member;
 import jakarta.persistence.*;
 import lombok.Getter;

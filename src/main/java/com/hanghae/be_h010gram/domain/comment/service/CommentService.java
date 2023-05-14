@@ -3,8 +3,8 @@ package com.hanghae.be_h010gram.domain.comment.service;
 import com.hanghae.be_h010gram.domain.comment.dto.CommentRequestDto;
 import com.hanghae.be_h010gram.domain.comment.dto.CommentResponseDto;
 import com.hanghae.be_h010gram.domain.comment.entity.Comment;
-import com.hanghae.be_h010gram.domain.like.entity.CommentLike;
-import com.hanghae.be_h010gram.domain.like.repository.CommentLikeRepository;
+import com.hanghae.be_h010gram.domain.comment.entity.CommentLike;
+import com.hanghae.be_h010gram.domain.comment.repository.CommentLikeRepository;
 import com.hanghae.be_h010gram.domain.comment.repository.CommentRepository;
 import com.hanghae.be_h010gram.domain.member.entity.Member;
 import com.hanghae.be_h010gram.domain.post.entity.Post;
@@ -62,6 +62,25 @@ public class CommentService {
     public void validateCommentAuthor(Member member, Comment comment) {
         if (!member.getId().equals(comment.getMember().getId())) {
             throw new CustomException(ExceptionEnum.COMMENT_NOT_FOUND);
+        }
+    }
+
+    //댓글 좋아요
+    @Transactional
+    public ResponseDto<?> likeComment(Long commentId, Member member) {
+        // 댓글 존재확인.
+        Comment comment = commentRepository.findById(commentId).orElseThrow(() -> new CustomException(ExceptionEnum.COMMENT_NOT_FOUND));
+
+        if (commentLikeRepository.findByMemberAndComment(member, comment) == null) {
+            comment.plusLiked();
+            commentLikeRepository.save(new CommentLike(member, comment));
+            return ResponseDto.setSuccess("댓글 좋아요 성공");
+
+        } else {
+            CommentLike commentLike = commentLikeRepository.findByMemberAndComment(member, comment);
+            comment.minusLiked();
+            commentLikeRepository.delete(commentLike);
+            return ResponseDto.setSuccess("댓글 좋아요 취소 성공");
         }
     }
 

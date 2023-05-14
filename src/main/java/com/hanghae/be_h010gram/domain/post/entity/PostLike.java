@@ -1,7 +1,6 @@
-package com.hanghae.be_h010gram.domain.like.entity;
+package com.hanghae.be_h010gram.domain.post.entity;
 
 import com.hanghae.be_h010gram.domain.member.entity.Member;
-import com.hanghae.be_h010gram.domain.post.entity.Post;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
