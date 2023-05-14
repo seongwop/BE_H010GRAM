@@ -1,11 +1,13 @@
 package com.hanghae.be_h010gram.domain.post.dto;
 
+import com.hanghae.be_h010gram.domain.comment.dto.CommentResponseDto;
 import com.hanghae.be_h010gram.domain.comment.entity.Comment;
 import com.hanghae.be_h010gram.domain.post.entity.Post;
 import lombok.Getter;
 
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Getter
 public class PostResponseDto {
@@ -14,7 +16,7 @@ public class PostResponseDto {
     private String nickname;
     private LocalDateTime createdAt;
 //    private LocalDateTime modifiedAt;
-    private List<Comment> comment;
+    private List<CommentResponseDto> comment;
     private int like;
 
     public PostResponseDto(Post post) {
@@ -23,7 +25,7 @@ public class PostResponseDto {
         this.nickname = post.getMember().getNickname();
         this.createdAt = post.getCreatedAt();
 //        this.modifiedAt = post.getModifiedAt();
-        this.comment = post.getComments();
+        this.comment = CommentResponseDto.ofList(post.getComments());
         this.like = post.getPostLike();
     }
 
