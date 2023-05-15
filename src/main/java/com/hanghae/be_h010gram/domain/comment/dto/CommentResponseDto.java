@@ -9,14 +9,14 @@ import java.util.stream.Collectors;
 
 @Getter
 public class CommentResponseDto {
-    //private Long id;
+    private Long id;
     private String nickname;
     private String content;
     private int liked;
     private LocalDateTime createdAt;
 
     public CommentResponseDto(Comment comment) {
-        //this.id = comment.getId();
+        this.id = comment.getId();
         this.nickname = comment.getMember().getNickname();
         this.content = comment.getContent();
         this.liked = comment.getLiked();
