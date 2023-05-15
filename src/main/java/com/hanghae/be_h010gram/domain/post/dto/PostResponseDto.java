@@ -1,11 +1,9 @@
 package com.hanghae.be_h010gram.domain.post.dto;
 
-import com.hanghae.be_h010gram.domain.comment.dto.CommentResponseDto;
 import com.hanghae.be_h010gram.domain.post.entity.Post;
 import lombok.Getter;
 
 import java.time.LocalDateTime;
-import java.util.List;
 
 @Getter
 public class PostResponseDto {
