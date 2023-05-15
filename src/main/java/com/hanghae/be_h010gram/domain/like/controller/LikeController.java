@@ -28,4 +28,9 @@ public class LikeController {
     public ResponseDto<?> likeComment(@PathVariable Long commentId, @AuthenticationPrincipal UserDetailsImpl userDetails) {
         return likeService.likeComment(commentId, userDetails.getMember());
     }
+
+    @PostMapping("cancel/comments/{commentId}")
+    public ResponseDto<?> likeCancelComment(@PathVariable Long commentId, @AuthenticationPrincipal UserDetailsImpl userDetails) {
+        return likeService.likeCancelComment(commentId, userDetails.getMember());
+    }
 }
