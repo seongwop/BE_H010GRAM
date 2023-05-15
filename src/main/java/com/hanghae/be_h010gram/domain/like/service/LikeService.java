@@ -66,9 +66,14 @@ public class LikeService {
     public ResponseDto<?> likePost(Long id, Member member) {
         Post post = postRepository.findById(id).orElseThrow(() -> new CustomException(POST_NOT_FOUND));
 
-        memberRepository.findById(member.getId()).orElseThrow(() -> new CustomException(INVALID_USER));
+        Member existingMember = memberRepository.findById(member.getId()).orElseThrow(() -> new CustomException(INVALID_USER));
 
-        postLikeRepository.save(new PostLike(post, member));
+        boolean isPostLikedByMember = postLikeRepository.existsByPostAndMember(post, existingMember);
+        if (isPostLikedByMember) {
+            throw new CustomException(INVALID_LIKE);
+        }
+
+        postLikeRepository.save(new PostLike(post, existingMember));
         post.updateLike(true);
         return ResponseDto.setSuccess("좋아요 성공");
     }
@@ -78,9 +83,14 @@ public class LikeService {
     public ResponseDto<?> likeCancelPost(Long postId, Member member) {
         Post post = postRepository.findById(postId).orElseThrow(() -> new CustomException(ExceptionEnum.COMMENT_NOT_FOUND));
 
-        memberRepository.findById(member.getId()).orElseThrow(() -> new CustomException(INVALID_USER));
+        Member existingMember = memberRepository.findById(member.getId()).orElseThrow(() -> new CustomException(INVALID_USER));
 
-        PostLike postLike = postLikeRepository.findByPostAndMember(post, member);
+        boolean isPostLikedByMember = postLikeRepository.existsByPostAndMember(post, existingMember);
+        if (!isPostLikedByMember) {
+            throw new CustomException(INVALID_LIKE_CANCEL);
+        }
+
+        PostLike postLike = postLikeRepository.findByPostAndMember(post, existingMember);
         postLikeRepository.delete(postLike);
         post.updateLike(false);
         return ResponseDto.setSuccess("좋아요 취소");
