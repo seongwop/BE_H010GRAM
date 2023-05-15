@@ -19,7 +19,7 @@ public class PostController {
 
     // 목록 조회
     @GetMapping
-    public List<ResponseDto<PostResponseDto>> getAllPosts() {
+    public ResponseDto<List<PostResponseDto>> getAllPosts() {
         return postService.getAllPosts();
     }
 

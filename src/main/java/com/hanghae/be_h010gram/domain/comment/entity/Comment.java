@@ -57,8 +57,9 @@ public class Comment extends Timestamped {
     }
 
     public void plusLiked() {
-        liked +=  1;
+        liked += 1;
     }
+
     public void minusLiked() {
         liked -= 1;
     }

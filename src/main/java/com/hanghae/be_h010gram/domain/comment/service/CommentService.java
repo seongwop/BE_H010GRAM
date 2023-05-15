@@ -3,8 +3,6 @@ package com.hanghae.be_h010gram.domain.comment.service;
 import com.hanghae.be_h010gram.domain.comment.dto.CommentRequestDto;
 import com.hanghae.be_h010gram.domain.comment.dto.CommentResponseDto;
 import com.hanghae.be_h010gram.domain.comment.entity.Comment;
-import com.hanghae.be_h010gram.domain.like.entity.CommentLike;
-import com.hanghae.be_h010gram.domain.like.repository.CommentLikeRepository;
 import com.hanghae.be_h010gram.domain.comment.repository.CommentRepository;
 import com.hanghae.be_h010gram.domain.member.entity.Member;
 import com.hanghae.be_h010gram.domain.post.entity.Post;
@@ -28,7 +26,6 @@ public class CommentService {
 
     private final PostRepository postRepository;
     private final CommentRepository commentRepository;
-    private final CommentLikeRepository commentLikeRepository;
 
     /**
      * 댓글 등록
@@ -38,7 +35,7 @@ public class CommentService {
         Post post = validateExistPost(id);
 
         Comment comment = commentRepository.save(new Comment(commentRequestDto, post, member));
-        return ResponseDto.setSuccess("댓글 등록 성공",new CommentResponseDto(comment));
+        return ResponseDto.setSuccess("댓글 등록 성공", new CommentResponseDto(comment));
     }
 
     /**
@@ -60,7 +57,7 @@ public class CommentService {
         Comment comment = validateExistComment(id);
         validateCommentAuthor(member, comment);
         comment.modify(commentRequestDto);
-        return ResponseDto.setSuccess("댓글 수정 성공",new CommentResponseDto(comment));
+        return ResponseDto.setSuccess("댓글 수정 성공", new CommentResponseDto(comment));
     }
 
     /**
@@ -81,14 +78,11 @@ public class CommentService {
     }
 
     public Comment validateExistComment(Long id) {
-        return commentRepository.findById(id).orElseThrow(
-                () -> new CustomException(ExceptionEnum.COMMENT_NOT_FOUND)
-        );
+        return commentRepository.findById(id).orElseThrow(() -> new CustomException(ExceptionEnum.COMMENT_NOT_FOUND));
     }
 
     public Post validateExistPost(Long id) {
-        return postRepository.findById(id).orElseThrow(
-                () -> new CustomException(ExceptionEnum.POST_NOT_FOUND));
+        return postRepository.findById(id).orElseThrow(() -> new CustomException(ExceptionEnum.POST_NOT_FOUND));
 
     }
 }

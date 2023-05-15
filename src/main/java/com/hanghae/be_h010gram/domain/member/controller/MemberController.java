@@ -32,7 +32,7 @@ public class MemberController {
     }
 
     @GetMapping("/members/{memberId}")
-    public ResponseDto<MemberResponseDto> getProfile (@PathVariable Long memberId, @AuthenticationPrincipal UserDetailsImpl userDetails) {
+    public ResponseDto<MemberResponseDto> getProfile(@PathVariable Long memberId, @AuthenticationPrincipal UserDetailsImpl userDetails) {
         return memberService.getProfile(memberId, userDetails.getMember());
     }
 

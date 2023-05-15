@@ -33,10 +33,10 @@ public class Post extends Timestamped {
     @JoinColumn(name = "MEMBER_ID")
     private Member member;
 
-    @OneToMany(mappedBy = "post", cascade = CascadeType.REMOVE)
-    @OrderBy("id asc")
-    @JsonBackReference
-    private List<Comment> comments = new ArrayList<>();
+//    @OneToMany(mappedBy = "post", cascade = CascadeType.REMOVE)
+//    @OrderBy("id asc")
+//    @JsonBackReference
+//    private List<Comment> comments = new ArrayList<>();
 
     @ColumnDefault("0")
     private int postLike;
