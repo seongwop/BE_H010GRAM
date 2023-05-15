@@ -26,13 +26,13 @@ public class Member {
 
     @Column(columnDefinition = "LONGTEXT")
     @Lob
-    private String profileImage;
+    private String memberImage;
 
     @Builder
-    private Member(String email, String nickname, String password, String profileImage) {
+    private Member(String email, String nickname, String password, String memberImage) {
         this.email = email;
         this.nickname = nickname;
         this.password = password;
-        this.profileImage = profileImage;
+        this.memberImage = memberImage;
     }
 }
