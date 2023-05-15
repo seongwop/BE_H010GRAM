@@ -41,11 +41,12 @@ public class PostController {
     }
 
     // 수정
-    @PutMapping("{id}")
+    @PutMapping(value = "{id}", consumes = {MediaType.MULTIPART_FORM_DATA_VALUE, MediaType.APPLICATION_FORM_URLENCODED_VALUE})
     public ResponseDto<PostResponseDto> updatePost(@PathVariable Long id,
-                                                   @RequestBody PostRequestDto postRequestDto,
-                                                   @AuthenticationPrincipal UserDetailsImpl userDetails) {
-        return postService.updatePost(id, postRequestDto, userDetails.getMember());
+                                                   @RequestPart(value = "postRequestDto", required = false) PostRequestDto postRequestDto,
+                                                   @RequestPart(value = "imageFile", required = false) MultipartFile image,
+                                                   @AuthenticationPrincipal UserDetailsImpl userDetails) throws IOException {
+        return postService.updatePost(id, postRequestDto, image, userDetails.getMember());
     }
 
     // 삭제

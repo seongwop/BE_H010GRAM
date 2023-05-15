@@ -64,14 +64,22 @@ public class PostService {
 
     // 게시물 수정
     @Transactional
-    public ResponseDto<PostResponseDto> updatePost(Long id, PostRequestDto postRequestDto, Member member) {
+    public ResponseDto<PostResponseDto> updatePost(Long id, PostRequestDto postRequestDto, MultipartFile image, Member member) throws IOException {
         Post post = postRepository.findById(id).orElseThrow(() -> new CustomException(POST_NOT_FOUND));
-        if (post.getMember().getId().equals(member.getId())) {
-            post.update(postRequestDto);
-            return ResponseDto.setSuccess("게시글 수정 성공", new PostResponseDto(post));
-        } else {
+        if (!post.getMember().getId().equals(member.getId())) {
             throw new CustomException(INVALID_USER);
         }
+
+        post.update(postRequestDto);
+
+        if (image != null && !image.isEmpty()) {
+            s3Service.delete(post.getPostImage());
+            String imageUrl = s3Service.uploadFile(image);
+            post.setPostImage(imageUrl);
+        }
+
+        postRepository.save(post);
+        return ResponseDto.setSuccess("게시글 수정 성공", new PostResponseDto(post));
     }
 
     // 게시물 삭제
