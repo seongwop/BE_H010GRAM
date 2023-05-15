@@ -27,6 +27,7 @@ public class CommentResponseDto {
         return comments.stream().map(CommentResponseDto::new).collect(Collectors.toList());
     }
 }
+
 //    private boolean likeStatus;
 //    private int likeCount;
 

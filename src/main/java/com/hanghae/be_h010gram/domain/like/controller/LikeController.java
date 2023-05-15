@@ -18,13 +18,13 @@ public class LikeController {
     private final LikeService likeService;
 
     // 좋아요
-    @PostMapping("{postId}")
+    @PostMapping("posts/{postId}")
     public ResponseDto<?> updateLike(@PathVariable Long postId, @AuthenticationPrincipal UserDetailsImpl userDetails) {
         return likeService.updateLike(postId, userDetails.getMember());
     }
 
     //댓글좋아요
-    @PostMapping("{commentId}")
+    @PostMapping("comments/{commentId}")
     public ResponseDto<?> likeComment(@PathVariable Long commentId, @AuthenticationPrincipal UserDetailsImpl userDetails) {
         return likeService.likeComment(commentId, userDetails.getMember());
     }
