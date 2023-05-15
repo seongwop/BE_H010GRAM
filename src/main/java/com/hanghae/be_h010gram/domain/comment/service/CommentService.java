@@ -42,10 +42,10 @@ public class CommentService {
      * 댓글 전체 조회
      */
 
-    public ResponseDto<List<CommentResponseDto>> getAllComments() {
+    public ResponseDto<List<CommentResponseDto>> getAllComments(Long postId) {
 
         return ResponseDto.setSuccess("댓글 전체 조회 성공",commentRepository
-                .findAllByOrderByCreatedAtDesc()
+                .findAllByPostIdOrderByCreatedAtDesc(postId)
                 .stream().map(CommentResponseDto::new).collect(Collectors.toList()));
     }
 
