@@ -28,5 +28,6 @@ public class CommentLike {
     public CommentLike(Member member, Comment comment) {
         this.comment = comment;
         this.member = member;
+        comment.getCommentLikes().add(this);
     }
 }

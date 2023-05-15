@@ -1,5 +1,6 @@
 package com.hanghae.be_h010gram.domain.like.controller;
 
+import com.hanghae.be_h010gram.domain.like.dto.LikeResponseDto;
 import com.hanghae.be_h010gram.domain.like.service.LikeService;
 import com.hanghae.be_h010gram.security.auth.UserDetailsImpl;
 import com.hanghae.be_h010gram.util.ResponseDto;
@@ -25,7 +26,7 @@ public class LikeController {
 
     //댓글좋아요
     @PostMapping("comments/{commentId}")
-    public ResponseDto<?> likeComment(@PathVariable Long commentId, @AuthenticationPrincipal UserDetailsImpl userDetails) {
+    public ResponseDto<LikeResponseDto> likeComment(@PathVariable Long commentId, @AuthenticationPrincipal UserDetailsImpl userDetails) {
         return likeService.likeComment(commentId, userDetails.getMember());
     }
 

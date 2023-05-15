@@ -2,6 +2,7 @@ package com.hanghae.be_h010gram.domain.like.service;
 
 import com.hanghae.be_h010gram.domain.comment.entity.Comment;
 import com.hanghae.be_h010gram.domain.comment.repository.CommentRepository;
+import com.hanghae.be_h010gram.domain.like.dto.LikeResponseDto;
 import com.hanghae.be_h010gram.domain.like.entity.CommentLike;
 import com.hanghae.be_h010gram.domain.like.entity.PostLike;
 import com.hanghae.be_h010gram.domain.like.repository.CommentLikeRepository;
@@ -31,18 +32,12 @@ public class LikeService {
 
     //댓글 좋아요
     @Transactional
-    public ResponseDto<?> likeComment(Long commentId, Member member) {
+    public ResponseDto<LikeResponseDto> likeComment(Long commentId, Member member) {
         // 댓글 존재확인.
         Comment comment = commentRepository.findById(commentId).orElseThrow(() -> new CustomException(ExceptionEnum.COMMENT_NOT_FOUND));
 
-        if (commentLikeRepository.findByMemberAndComment(member, comment) == null) {
-            comment.plusLiked();
-            commentLikeRepository.save(new CommentLike(member, comment));
-            return ResponseDto.setSuccess("댓글 좋아요 성공");
-
-        } else {
-            throw new CustomException(INVALID_LIKE);
-        }
+        commentLikeRepository.save(new CommentLike(member, comment));
+        return ResponseDto.setSuccess("댓글 좋아요 성공");
     }
 
     //댓글 좋아요 취소
@@ -52,7 +47,7 @@ public class LikeService {
         Comment comment = commentRepository.findById(commentId).orElseThrow(() -> new CustomException(ExceptionEnum.COMMENT_NOT_FOUND));
 
         if (commentLikeRepository.findByMemberAndComment(member, comment) != null) {
-            comment.minusLiked();
+
             commentLikeRepository.delete(new CommentLike(member, comment));
             return ResponseDto.setSuccess("댓글 좋아요 취소 성공");
         } else {
