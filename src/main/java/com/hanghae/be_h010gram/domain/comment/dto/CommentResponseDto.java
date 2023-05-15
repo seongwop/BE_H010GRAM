@@ -4,6 +4,8 @@ import com.hanghae.be_h010gram.domain.comment.entity.Comment;
 import lombok.Getter;
 
 import java.time.LocalDateTime;
+import java.util.List;
+import java.util.stream.Collectors;
 
 @Getter
 public class CommentResponseDto {
@@ -20,7 +22,11 @@ public class CommentResponseDto {
         this.liked = comment.getLiked();
         this.createdAt = comment.getCreatedAt();
     }
+    public static List<CommentResponseDto> ofList(List<Comment> comments) {
+        return comments.stream().map(CommentResponseDto::new).collect(Collectors.toList());
+    }
 }
+
 //    private boolean likeStatus;
 //    private int likeCount;
 
