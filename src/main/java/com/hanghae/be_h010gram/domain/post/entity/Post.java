@@ -1,7 +1,5 @@
 package com.hanghae.be_h010gram.domain.post.entity;
 
-import com.fasterxml.jackson.annotation.JsonBackReference;
-import com.hanghae.be_h010gram.domain.comment.entity.Comment;
 import com.hanghae.be_h010gram.domain.member.entity.Member;
 import com.hanghae.be_h010gram.domain.post.dto.PostRequestDto;
 import com.hanghae.be_h010gram.exception.CustomException;
@@ -10,8 +8,6 @@ import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import org.hibernate.annotations.ColumnDefault;
-
-import java.util.List;
 
 import static com.hanghae.be_h010gram.exception.ExceptionEnum.POST_CONTENT_NOT_FOUND;
 import static com.hanghae.be_h010gram.exception.ExceptionEnum.USER_NOT_FOUND;
@@ -32,13 +28,13 @@ public class Post extends Timestamped {
     @JoinColumn(name = "MEMBER_ID")
     private Member member;
 
-    @OneToMany(mappedBy = "post", cascade = CascadeType.REMOVE)
-    @OrderBy("id asc")
-    @JsonBackReference
-    private List<Comment> comments;
+//    @OneToMany(mappedBy = "post", cascade = CascadeType.REMOVE)
+//    @OrderBy("id asc")
+//    @JsonBackReference
+//    private List<Comment> comments = new ArrayList<>();
 
     @ColumnDefault("0")
-    private int postLike;
+    private int liked;
 
     public Post(PostRequestDto postRequestDto, Member member) {
         if (member.getId() == null) {
@@ -58,7 +54,7 @@ public class Post extends Timestamped {
     }
 
     public void updateLike(boolean likeOrDislike) {
-        this.postLike = likeOrDislike ? this.postLike + 1 : this.postLike - 1;
+        this.liked = likeOrDislike ? this.liked + 1 : this.liked - 1;
     }
 
 }

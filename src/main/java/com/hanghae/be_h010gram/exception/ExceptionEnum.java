@@ -14,6 +14,8 @@ public enum ExceptionEnum {
     INVALID_USER_EXISTENCE(HttpStatus.BAD_REQUEST, "중복된 email 입니다."),
     INVALID_USER_PASSWORD(HttpStatus.BAD_REQUEST, "비밀번호를 다시 입력해주세요."),
     INVALID_ADMIN_PASSWORD(HttpStatus.BAD_REQUEST, "관리자의 비밀번호를 다시 입력해주세요."),
+    INVALID_LIKE(HttpStatus.BAD_REQUEST, "이미 좋아요를 했습니다"),
+    INVALID_LIKE_CANCEL(HttpStatus.BAD_REQUEST, "이미 좋아요 취소를 했습니다"),
     INVALID_SIGN(HttpStatus.BAD_REQUEST),
     FILE_SIZE_OVER(HttpStatus.BAD_REQUEST, "파일 용량은 10MB 미만까지 가능합니다."),
 
@@ -35,7 +37,7 @@ public enum ExceptionEnum {
     private String message;
     private HttpStatus status;
 
-    ExceptionEnum(HttpStatus status, String message){
+    ExceptionEnum(HttpStatus status, String message) {
         this.message = message;
         this.status = status;
     }

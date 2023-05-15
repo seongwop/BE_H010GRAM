@@ -2,6 +2,7 @@ package com.hanghae.be_h010gram.domain.like.service;
 
 import com.hanghae.be_h010gram.domain.comment.entity.Comment;
 import com.hanghae.be_h010gram.domain.comment.repository.CommentRepository;
+import com.hanghae.be_h010gram.domain.like.dto.LikeResponseDto;
 import com.hanghae.be_h010gram.domain.like.entity.CommentLike;
 import com.hanghae.be_h010gram.domain.like.entity.PostLike;
 import com.hanghae.be_h010gram.domain.like.repository.CommentLikeRepository;
@@ -17,8 +18,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import static com.hanghae.be_h010gram.exception.ExceptionEnum.INVALID_USER;
-import static com.hanghae.be_h010gram.exception.ExceptionEnum.POST_NOT_FOUND;
+import static com.hanghae.be_h010gram.exception.ExceptionEnum.*;
 
 @Service
 @RequiredArgsConstructor
@@ -32,43 +32,78 @@ public class LikeService {
 
     //댓글 좋아요
     @Transactional
-    public ResponseDto<?> likeComment(Long commentId, Member member) {
+    public ResponseDto<LikeResponseDto> likeComment(Long commentId, Member member) {
         // 댓글 존재확인.
-        Comment comment = commentRepository.findById(commentId).orElseThrow(() -> new CustomException(ExceptionEnum.COMMENT_NOT_FOUND));
+        Comment comment = commentRepository.findById(commentId).orElseThrow(() ->
+             new CustomException(ExceptionEnum.COMMENT_NOT_FOUND)
+        );
 
-        if (commentLikeRepository.findByMemberAndComment(member, comment) == null) {
-            comment.plusLiked();
-            commentLikeRepository.save(new CommentLike(member, comment));
-            return ResponseDto.setSuccess("댓글 좋아요 성공");
+        Member existingMember = memberRepository.findById(member.getId()).orElseThrow(() ->
+             new CustomException(INVALID_USER)
+        );
 
-        } else {
-            CommentLike commentLike = commentLikeRepository.findByMemberAndComment(member, comment);
-            comment.minusLiked();
-            commentLikeRepository.delete(commentLike);
-            return ResponseDto.setSuccess("댓글 좋아요 취소 성공");
+        boolean isPostLikedByMember = commentLikeRepository.existsByCommentAndMember(comment, existingMember);
+        if (isPostLikedByMember) {
+            throw new CustomException(INVALID_LIKE);
         }
+
+        commentLikeRepository.save(new CommentLike(comment, existingMember));
+        comment.updateLike(true);
+        return ResponseDto.setSuccess("댓글 좋아요 성공");
     }
 
-    // 좋아요
+    //댓글 좋아요 취소
     @Transactional
-    public ResponseDto<?> updateLike(Long id, Member member) {
-        Post post = postRepository.findById(id).orElseThrow(
-                () -> new CustomException(POST_NOT_FOUND)
-        );
+    public ResponseDto<LikeResponseDto> likeCancelComment(Long commentId, Member member) {
+        // 댓글 존재확인.
+        Comment comment = commentRepository.findById(commentId).orElseThrow(() -> new CustomException(ExceptionEnum.COMMENT_NOT_FOUND));
+        // 회원 확인.
+        Member existingMember = memberRepository.findById(member.getId()).orElseThrow(() -> new CustomException(INVALID_USER));
 
-        memberRepository.findById(member.getId()).orElseThrow(
-                () -> new CustomException(INVALID_USER)
-        );
-
-        if (postLikeRepository.findByPostAndMember(post, member) == null) {
-            postLikeRepository.save(new PostLike(post, member));
-            post.updateLike(true);
-            return ResponseDto.setSuccess("좋아요 성공");
-        } else {
-            PostLike postLike = postLikeRepository.findByPostAndMember(post, member);
-            postLikeRepository.delete(postLike);
-            post.updateLike(false);
-            return ResponseDto.setSuccess("좋아요 취소");
+        boolean isCommentLikedByMember = commentLikeRepository.existsByCommentAndMember(comment, existingMember);
+        if (!isCommentLikedByMember) {
+            throw new CustomException(INVALID_LIKE_CANCEL);
         }
+
+        CommentLike commentLike = commentLikeRepository.findByCommentAndMember(comment, existingMember);
+        commentLikeRepository.delete(commentLike);
+        comment.updateLike(false);
+        return ResponseDto.setSuccess("댓글 좋아요 취소 성공");
+    }
+
+
+    // 게시글 좋아요
+    @Transactional
+    public ResponseDto<?> likePost(Long id, Member member) {
+        Post post = postRepository.findById(id).orElseThrow(() -> new CustomException(POST_NOT_FOUND));
+
+        Member existingMember = memberRepository.findById(member.getId()).orElseThrow(() -> new CustomException(INVALID_USER));
+
+        boolean isPostLikedByMember = postLikeRepository.existsByPostAndMember(post, existingMember);
+        if (isPostLikedByMember) {
+            throw new CustomException(INVALID_LIKE);
+        }
+
+        postLikeRepository.save(new PostLike(post, existingMember));
+        post.updateLike(true);
+        return ResponseDto.setSuccess("게시글 좋아요 성공");
+    }
+
+    // 게시글 좋아요 취소
+    @Transactional
+    public ResponseDto<?> likeCancelPost(Long postId, Member member) {
+        Post post = postRepository.findById(postId).orElseThrow(() -> new CustomException(ExceptionEnum.COMMENT_NOT_FOUND));
+
+        Member existingMember = memberRepository.findById(member.getId()).orElseThrow(() -> new CustomException(INVALID_USER));
+
+        boolean isPostLikedByMember = postLikeRepository.existsByPostAndMember(post, existingMember);
+        if (!isPostLikedByMember) {
+            throw new CustomException(INVALID_LIKE_CANCEL);
+        }
+
+        PostLike postLike = postLikeRepository.findByPostAndMember(post, existingMember);
+        postLikeRepository.delete(postLike);
+        post.updateLike(false);
+        return ResponseDto.setSuccess("게시글 좋아요 취소 성공");
     }
 }

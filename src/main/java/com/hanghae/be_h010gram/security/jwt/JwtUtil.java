@@ -52,15 +52,7 @@ public class JwtUtil {
     public String createToken(String nickname, String email, Long memberId) {
         Date date = new Date();
 
-        return BEARER_PREFIX +
-                Jwts.builder()
-                        .setSubject(email)
-                        .claim("nickname", nickname)
-                        .claim("memberId", memberId)
-                        .setExpiration(new Date(date.getTime() + TOKEN_TIME))
-                        .setIssuedAt(date)
-                        .signWith(key, signatureAlgorithm)
-                        .compact();
+        return BEARER_PREFIX + Jwts.builder().setSubject(email).claim("nickname", nickname).claim("memberId", memberId).setExpiration(new Date(date.getTime() + TOKEN_TIME)).setIssuedAt(date).signWith(key, signatureAlgorithm).compact();
     }
 
     // 토큰 검증
