@@ -1,5 +1,6 @@
 package com.hanghae.be_h010gram.domain.post.controller;
 
+import com.hanghae.be_h010gram.domain.post.dto.MainPostResponseDto;
 import com.hanghae.be_h010gram.domain.post.dto.PostRequestDto;
 import com.hanghae.be_h010gram.domain.post.dto.PostResponseDto;
 import com.hanghae.be_h010gram.domain.post.service.PostService;
@@ -22,7 +23,7 @@ public class PostController {
 
     // 목록 조회
     @GetMapping
-    public ResponseDto<List<PostResponseDto>> getAllPosts() {
+    public ResponseDto<List<MainPostResponseDto>> getAllPosts() {
         return postService.getAllPosts();
     }
 
