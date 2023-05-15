@@ -15,6 +15,7 @@ public class PostResponseDto {
     private LocalDateTime createdAt;
     //    private LocalDateTime modifiedAt;
     private int liked;
+    private String postImage;
 
     public PostResponseDto(Post post) {
         this.id = post.getId();
@@ -23,6 +24,7 @@ public class PostResponseDto {
         this.createdAt = post.getCreatedAt();
 //        this.modifiedAt = post.getModifiedAt();
         this.liked = post.getLiked();
+        this.postImage = post.getPostImage();
     }
 
 }
