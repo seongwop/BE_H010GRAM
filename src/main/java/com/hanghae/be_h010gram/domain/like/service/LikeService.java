@@ -71,7 +71,6 @@ public class LikeService {
         return ResponseDto.setSuccess("댓글 좋아요 취소 성공");
     }
 
-
     // 게시글 좋아요
     @Transactional
     public ResponseDto<?> likePost(Long id, Member member) {

@@ -1,4 +1,4 @@
-package com.hanghae.be_h010gram.domain.member.Service;
+package com.hanghae.be_h010gram.domain.member.service;
 
 
 import com.hanghae.be_h010gram.domain.member.dto.MemberRequestDto;

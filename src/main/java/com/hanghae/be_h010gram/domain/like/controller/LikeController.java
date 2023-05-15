@@ -10,7 +10,7 @@ import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequiredArgsConstructor
-@RequestMapping("likes")
+@RequestMapping()
 public class LikeController {
 
     private final LikeService likeService;
@@ -28,13 +28,13 @@ public class LikeController {
     }
 
     //댓글좋아요
-    @PostMapping("/comments/{commentId}")
+    @PostMapping("/comments/{commentId}/likes")
     public ResponseDto<LikeResponseDto> likeComment(@PathVariable Long commentId, @AuthenticationPrincipal UserDetailsImpl userDetails) {
         return likeService.likeComment(commentId, userDetails.getMember());
     }
 
     //댓글좋아요 취소
-    @DeleteMapping("/comments/{commentId}")
+    @DeleteMapping("/comments/{commentId}/likes")
     public ResponseDto<LikeResponseDto> likeCancelComment(@PathVariable Long commentId, @AuthenticationPrincipal UserDetailsImpl userDetails) {
         return likeService.likeCancelComment(commentId, userDetails.getMember());
     }
