@@ -6,5 +6,7 @@ import com.hanghae.be_h010gram.domain.member.entity.Member;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 public interface CommentLikeRepository extends JpaRepository<CommentLike, Long> {
-    CommentLike findByMemberAndComment(Member member, Comment comment);
+    CommentLike findByCommentAndMember(Comment comment,Member member);
+
+    boolean existsByCommentAndMember(Comment comment, Member member);
 }

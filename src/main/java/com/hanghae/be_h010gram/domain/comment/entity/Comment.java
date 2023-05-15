@@ -44,6 +44,10 @@ public class Comment extends Timestamped {
         this.member = member;
     }
 
+    public void updateLike(boolean likeOrDislike) {
+        this.liked = likeOrDislike ? this.liked + 1 : this.liked - 1;
+    }
+
     public void setMember(Member member) {
         this.member = member;
     }
@@ -54,13 +58,5 @@ public class Comment extends Timestamped {
 
     public void modify(CommentRequestDto commentRequestDto) {
         this.content = commentRequestDto.getContent();
-    }
-
-    public void plusLiked() {
-        liked += 1;
-    }
-
-    public void minusLiked() {
-        liked -= 1;
     }
 }
