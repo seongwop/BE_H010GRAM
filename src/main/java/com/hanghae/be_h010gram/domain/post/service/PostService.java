@@ -8,15 +8,17 @@ import com.hanghae.be_h010gram.domain.post.entity.Post;
 import com.hanghae.be_h010gram.domain.post.repository.PostRepository;
 import com.hanghae.be_h010gram.exception.CustomException;
 import com.hanghae.be_h010gram.util.ResponseDto;
+import com.hanghae.be_h010gram.util.S3Service;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.multipart.MultipartFile;
 
+import java.io.IOException;
 import java.util.List;
 import java.util.stream.Collectors;
 
-import static com.hanghae.be_h010gram.exception.ExceptionEnum.INVALID_USER;
-import static com.hanghae.be_h010gram.exception.ExceptionEnum.POST_NOT_FOUND;
+import static com.hanghae.be_h010gram.exception.ExceptionEnum.*;
 
 @Service
 @RequiredArgsConstructor
@@ -24,6 +26,7 @@ public class PostService {
 
     private final PostRepository postRepository;
     private final PostLikeRepository postLikeRepository;
+    private final S3Service s3Service;
 
     // 전체 게시물 목록 조회
     @Transactional(readOnly = true)
@@ -45,21 +48,38 @@ public class PostService {
 
     // 게시물 등록
     @Transactional
-    public ResponseDto<PostResponseDto> createPost(PostRequestDto postRequestDto, Member member) {
-        Post post = postRepository.save(new Post(postRequestDto, member));
+    public ResponseDto<PostResponseDto> createPost(PostRequestDto postRequestDto, MultipartFile image, Member member) throws IOException {
+        if (image == null || image.isEmpty()) {
+            throw new CustomException(FILE_UNUPLOADED);
+        }
+
+        String imageUrl = s3Service.uploadFile(image);
+
+        Post post = new Post(postRequestDto, member);
+        post.setPostImage(imageUrl);
+        postRepository.save(post);
+
         return ResponseDto.setSuccess("게시글 등록 성공", new PostResponseDto(post));
     }
 
     // 게시물 수정
     @Transactional
-    public ResponseDto<PostResponseDto> updatePost(Long id, PostRequestDto postRequestDto, Member member) {
+    public ResponseDto<PostResponseDto> updatePost(Long id, PostRequestDto postRequestDto, MultipartFile image, Member member) throws IOException {
         Post post = postRepository.findById(id).orElseThrow(() -> new CustomException(POST_NOT_FOUND));
-        if (post.getMember().getId().equals(member.getId())) {
-            post.update(postRequestDto);
-            return ResponseDto.setSuccess("게시글 수정 성공", new PostResponseDto(post));
-        } else {
+        if (!post.getMember().getId().equals(member.getId())) {
             throw new CustomException(INVALID_USER);
         }
+
+        post.update(postRequestDto);
+
+        if (image != null && !image.isEmpty()) {
+            s3Service.delete(post.getPostImage());
+            String imageUrl = s3Service.uploadFile(image);
+            post.setPostImage(imageUrl);
+        }
+
+        postRepository.save(post);
+        return ResponseDto.setSuccess("게시글 수정 성공", new PostResponseDto(post));
     }
 
     // 게시물 삭제

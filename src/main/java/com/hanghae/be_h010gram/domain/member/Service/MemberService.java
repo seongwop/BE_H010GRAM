@@ -97,21 +97,23 @@ public class MemberService {
         updateMember.setNickname(profileRequestDto.getNickname());
         if (!image.isEmpty()) {
             //기존에 있던 이미지 파일 s3에서 삭제
-            s3Service.delete(updateMember.getProfileImage());
+            s3Service.delete(updateMember.getMemberImage());
             //새로 등록한 사진 s3에 업로드
             String uploadFilename = s3Service.uploadFile(image);
             //업로드 된 사진으로 수정
-            updateMember.setProfileImage(uploadFilename);
+            updateMember.setMemberImage(uploadFilename);
         }
 
         memberRepository.save(updateMember);
         return ResponseDto.setSuccess("success");
     }
 
+    //멤버 조회
     public Member isExistMember(Long id) {
         return memberRepository.findById(id).orElseThrow(() -> new CustomException(ExceptionEnum.USER_NOT_FOUND));
     }
 
+    //멤버 유효성 검사
     public void isMemberEqual(Long pathMemberId, Long tokenMemberId) {
         if (!Objects.equals(pathMemberId, tokenMemberId)) {
             //토큰의 정보가 유효하지 않아서 실패

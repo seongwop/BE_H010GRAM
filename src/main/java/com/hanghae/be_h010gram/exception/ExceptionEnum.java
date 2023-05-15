@@ -11,13 +11,14 @@ public enum ExceptionEnum {
     /* 400 BAD_REQUEST */
     INVALID_TOKEN(HttpStatus.BAD_REQUEST, "토큰이 유효하지 않습니다"),
     INVALID_USER(HttpStatus.BAD_REQUEST, "작성자만 삭제/수정할 수 있습니다."),
-    INVALID_USER_EXISTENCE(HttpStatus.BAD_REQUEST, "중복된 username 입니다."),
+    INVALID_USER_EXISTENCE(HttpStatus.BAD_REQUEST, "중복된 email 입니다."),
     INVALID_USER_PASSWORD(HttpStatus.BAD_REQUEST, "비밀번호를 다시 입력해주세요."),
     INVALID_ADMIN_PASSWORD(HttpStatus.BAD_REQUEST, "관리자의 비밀번호를 다시 입력해주세요."),
     INVALID_LIKE(HttpStatus.BAD_REQUEST, "이미 좋아요를 했습니다"),
     INVALID_LIKE_CANCEL(HttpStatus.BAD_REQUEST, "이미 좋아요 취소를 했습니다"),
     INVALID_SIGN(HttpStatus.BAD_REQUEST),
     FILE_SIZE_OVER(HttpStatus.BAD_REQUEST, "파일 용량은 10MB 미만까지 가능합니다."),
+    FILE_UNUPLOADED(HttpStatus.BAD_REQUEST, "이미지를 업로드해주세요."),
 
     /* 401 UNAUTHORIZED */
     INVALID_AUTH_TOKEN(HttpStatus.UNAUTHORIZED, "권한 정보가 없는 토큰입니다"),
