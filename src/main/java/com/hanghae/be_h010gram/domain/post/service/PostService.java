@@ -18,8 +18,7 @@ import java.io.IOException;
 import java.util.List;
 import java.util.stream.Collectors;
 
-import static com.hanghae.be_h010gram.exception.ExceptionEnum.INVALID_USER;
-import static com.hanghae.be_h010gram.exception.ExceptionEnum.POST_NOT_FOUND;
+import static com.hanghae.be_h010gram.exception.ExceptionEnum.*;
 
 @Service
 @RequiredArgsConstructor
@@ -50,6 +49,10 @@ public class PostService {
     // 게시물 등록
     @Transactional
     public ResponseDto<PostResponseDto> createPost(PostRequestDto postRequestDto, MultipartFile image, Member member) throws IOException {
+        if (image == null || image.isEmpty()) {
+            throw new CustomException(FILE_UNUPLOADED);
+        }
+
         String imageUrl = s3Service.uploadFile(image);
 
         Post post = new Post(postRequestDto, member);
