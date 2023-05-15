@@ -17,8 +17,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import static com.hanghae.be_h010gram.exception.ExceptionEnum.INVALID_USER;
-import static com.hanghae.be_h010gram.exception.ExceptionEnum.POST_NOT_FOUND;
+import static com.hanghae.be_h010gram.exception.ExceptionEnum.*;
 
 @Service
 @RequiredArgsConstructor
@@ -42,12 +41,25 @@ public class LikeService {
             return ResponseDto.setSuccess("댓글 좋아요 성공");
 
         } else {
-            CommentLike commentLike = commentLikeRepository.findByMemberAndComment(member, comment);
-            comment.minusLiked();
-            commentLikeRepository.delete(commentLike);
-            return ResponseDto.setSuccess("댓글 좋아요 취소 성공");
+            throw new CustomException(INVALID_LIKE);
         }
     }
+
+    //댓글 좋아요 취소
+    @Transactional
+    public ResponseDto<?> likeCancelComment(Long commentId, Member member) {
+        // 댓글 존재확인.
+        Comment comment = commentRepository.findById(commentId).orElseThrow(() -> new CustomException(ExceptionEnum.COMMENT_NOT_FOUND));
+
+        if (commentLikeRepository.findByMemberAndComment(member, comment) != null) {
+            comment.minusLiked();
+            commentLikeRepository.delete(new CommentLike(member, comment));
+            return ResponseDto.setSuccess("댓글 좋아요 취소 성공");
+        } else {
+            throw new CustomException(INVALID_LIKE_CANCEL);
+        }
+    }
+
 
     // 좋아요
     @Transactional
