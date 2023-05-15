@@ -7,6 +7,7 @@ import com.hanghae.be_h010gram.util.Timestamped;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.Setter;
 import org.hibernate.annotations.ColumnDefault;
 
 import static com.hanghae.be_h010gram.exception.ExceptionEnum.POST_CONTENT_NOT_FOUND;
@@ -14,6 +15,7 @@ import static com.hanghae.be_h010gram.exception.ExceptionEnum.USER_NOT_FOUND;
 
 @Entity
 @Getter
+@Setter
 @NoArgsConstructor
 public class Post extends Timestamped {
     @Id
@@ -28,13 +30,12 @@ public class Post extends Timestamped {
     @JoinColumn(name = "MEMBER_ID")
     private Member member;
 
-//    @OneToMany(mappedBy = "post", cascade = CascadeType.REMOVE)
-//    @OrderBy("id asc")
-//    @JsonBackReference
-//    private List<Comment> comments = new ArrayList<>();
-
     @ColumnDefault("0")
     private int liked;
+
+    @Column(columnDefinition = "LONGTEXT")
+    @Lob
+    private String postImage;
 
     public Post(PostRequestDto postRequestDto, Member member) {
         if (member.getId() == null) {
@@ -47,6 +48,7 @@ public class Post extends Timestamped {
 
         this.content = postRequestDto.getContent();
         this.member = member;
+        this.postImage = getPostImage();
     }
 
     public void update(PostRequestDto postRequestDto) {
