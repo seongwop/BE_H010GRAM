@@ -61,22 +61,28 @@ public class LikeService {
     }
 
 
-    // 좋아요
+    // 게시글 좋아요
     @Transactional
-    public ResponseDto<?> updateLike(Long id, Member member) {
+    public ResponseDto<?> likePost(Long id, Member member) {
         Post post = postRepository.findById(id).orElseThrow(() -> new CustomException(POST_NOT_FOUND));
 
         memberRepository.findById(member.getId()).orElseThrow(() -> new CustomException(INVALID_USER));
 
-        if (postLikeRepository.findByPostAndMember(post, member) == null) {
-            postLikeRepository.save(new PostLike(post, member));
-            post.updateLike(true);
-            return ResponseDto.setSuccess("좋아요 성공");
-        } else {
-            PostLike postLike = postLikeRepository.findByPostAndMember(post, member);
-            postLikeRepository.delete(postLike);
-            post.updateLike(false);
-            return ResponseDto.setSuccess("좋아요 취소");
-        }
+        postLikeRepository.save(new PostLike(post, member));
+        post.updateLike(true);
+        return ResponseDto.setSuccess("좋아요 성공");
+    }
+
+    // 게시글 좋아요 취소
+    @Transactional
+    public ResponseDto<?> likeCancelPost(Long postId, Member member) {
+        Post post = postRepository.findById(postId).orElseThrow(() -> new CustomException(ExceptionEnum.COMMENT_NOT_FOUND));
+
+        memberRepository.findById(member.getId()).orElseThrow(() -> new CustomException(INVALID_USER));
+
+        PostLike postLike = postLikeRepository.findByPostAndMember(post, member);
+        postLikeRepository.delete(postLike);
+        post.updateLike(false);
+        return ResponseDto.setSuccess("좋아요 취소");
     }
 }
