@@ -14,8 +14,7 @@ public class PostResponseDto {
     private String nickname;
     private LocalDateTime createdAt;
     //    private LocalDateTime modifiedAt;
-//    private List<CommentResponseDto> comment;
-    private int like;
+    private int liked;
 
     public PostResponseDto(Post post) {
         this.id = post.getId();
@@ -23,8 +22,7 @@ public class PostResponseDto {
         this.nickname = post.getMember().getNickname();
         this.createdAt = post.getCreatedAt();
 //        this.modifiedAt = post.getModifiedAt();
-//        this.comment = CommentResponseDto.ofList(post.getComments());
-        this.like = post.getPostLike();
+        this.liked = post.getLiked();
     }
 
 }

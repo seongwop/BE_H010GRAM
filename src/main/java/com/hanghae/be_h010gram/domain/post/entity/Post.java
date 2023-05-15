@@ -39,7 +39,7 @@ public class Post extends Timestamped {
 //    private List<Comment> comments = new ArrayList<>();
 
     @ColumnDefault("0")
-    private int postLike;
+    private int liked;
 
     public Post(PostRequestDto postRequestDto, Member member) {
         if (member.getId() == null) {
@@ -59,7 +59,7 @@ public class Post extends Timestamped {
     }
 
     public void updateLike(boolean likeOrDislike) {
-        this.postLike = likeOrDislike ? this.postLike + 1 : this.postLike - 1;
+        this.liked = likeOrDislike ? this.liked + 1 : this.liked - 1;
     }
 
 }
