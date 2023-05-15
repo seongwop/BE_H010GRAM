@@ -17,26 +17,27 @@ import org.springframework.web.multipart.MultipartFile;
 import java.io.IOException;
 
 @RestController
+@RequestMapping("api")
 @RequiredArgsConstructor
 public class MemberController {
     private final MemberService memberService;
 
-    @PostMapping("/login")
+    @PostMapping("login")
     public ResponseDto<String> login(@RequestBody MemberRequestDto.Login loginRequestDto, HttpServletResponse response) {
         return memberService.login(loginRequestDto, response);
     }
 
-    @PostMapping("/register")
+    @PostMapping("register")
     public ResponseDto<String> register(@Valid @RequestBody MemberRequestDto.Register requestDto) {
         return memberService.register(requestDto);
     }
 
-    @GetMapping("/members/{memberId}")
+    @GetMapping("members/{memberId}")
     public ResponseDto<MemberResponseDto> getProfile(@PathVariable Long memberId, @AuthenticationPrincipal UserDetailsImpl userDetails) {
         return memberService.getProfile(memberId, userDetails.getMember());
     }
 
-    @PutMapping(value = "/members/{memberId}", consumes = {MediaType.MULTIPART_FORM_DATA_VALUE, MediaType.APPLICATION_FORM_URLENCODED_VALUE})
+    @PutMapping(value = "members/{memberId}", consumes = {MediaType.MULTIPART_FORM_DATA_VALUE, MediaType.APPLICATION_FORM_URLENCODED_VALUE})
     public ResponseDto<String> updateProfile(@PathVariable Long memberId,
                                              @RequestPart(value = "profileRequestDto", required = false) ProfileRequestDto profileRequestDto,
                                              @RequestPart(value = "imageFile", required = false) MultipartFile image,
