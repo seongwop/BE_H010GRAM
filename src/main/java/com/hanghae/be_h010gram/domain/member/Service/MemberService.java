@@ -37,9 +37,7 @@ public class MemberService {
         String password = loginRequestDto.getPassword();
 
         //멤버 조회
-        Member member = memberRepository.findByEmail(email).orElseThrow(
-                () -> new CustomException(USER_NOT_FOUND)
-        );
+        Member member = memberRepository.findByEmail(email).orElseThrow(() -> new CustomException(USER_NOT_FOUND));
 
         //비밀번호 확인
         if (!passwordEncoder.matches(password, member.getPassword())) {
@@ -60,13 +58,12 @@ public class MemberService {
         }
         String encodedPassword = passwordEncoder.encode(requestDto.getPassword());
 
-        memberRepository.findByEmail(requestDto.getEmail()).ifPresent(
-                member -> {
-                    throw new CustomException(INVALID_USER_EXISTENCE);
-                }
-        );
+        memberRepository.findByEmail(requestDto.getEmail()).ifPresent(member -> {
+            throw new CustomException(INVALID_USER_EXISTENCE);
+        });
 
-        Member member = Member.builder().email(requestDto.getEmail())
+        Member member = Member.builder()
+                .email(requestDto.getEmail())
                 .password(encodedPassword)
                 .nickname(requestDto.getNickname())
                 .build();
@@ -89,8 +86,7 @@ public class MemberService {
     }
 
     @Transactional
-    public ResponseDto<String> updateProfile(Long memberId, ProfileRequestDto profileRequestDto,
-                                             MultipartFile image, Member member) throws IOException {
+    public ResponseDto<String> updateProfile(Long memberId, ProfileRequestDto profileRequestDto, MultipartFile image, Member member) throws IOException {
         //회원 조회
         Member updateMember = isExistMember(memberId);
 

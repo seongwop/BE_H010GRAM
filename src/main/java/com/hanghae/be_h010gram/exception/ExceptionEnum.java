@@ -37,7 +37,7 @@ public enum ExceptionEnum {
     private String message;
     private HttpStatus status;
 
-    ExceptionEnum(HttpStatus status, String message){
+    ExceptionEnum(HttpStatus status, String message) {
         this.message = message;
         this.status = status;
     }

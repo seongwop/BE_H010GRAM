@@ -22,6 +22,7 @@ public class CommentResponseDto {
         this.liked = comment.getLiked();
         this.createdAt = comment.getCreatedAt();
     }
+
     public static List<CommentResponseDto> ofList(List<Comment> comments) {
         return comments.stream().map(CommentResponseDto::new).collect(Collectors.toList());
     }

@@ -31,8 +31,7 @@ public class S3Service {
         ObjectMetadata objectMetadata = new ObjectMetadata();
         objectMetadata.setContentLength(multipartFile.getSize());
 
-        amazonS3Client.putObject(new PutObjectRequest(bucket, fileName, multipartFile.getInputStream(), objectMetadata)
-                    .withCannedAcl(CannedAccessControlList.PublicRead));
+        amazonS3Client.putObject(new PutObjectRequest(bucket, fileName, multipartFile.getInputStream(), objectMetadata).withCannedAcl(CannedAccessControlList.PublicRead));
 
         return amazonS3Client.getUrl(bucket, fileName).toString();
     }
@@ -40,7 +39,7 @@ public class S3Service {
     public boolean delete(String fileUrl) {
         try {
             String[] temp = fileUrl.split("/");
-            String fileKey = temp[temp.length-1];
+            String fileKey = temp[temp.length - 1];
             amazonS3Client.deleteObject(bucket, fileKey);
             return true;
         } catch (Exception e) {
