@@ -11,7 +11,7 @@ public enum ExceptionEnum {
     /* 400 BAD_REQUEST */
     INVALID_TOKEN(HttpStatus.BAD_REQUEST, "토큰이 유효하지 않습니다"),
     INVALID_USER(HttpStatus.BAD_REQUEST, "작성자만 삭제/수정할 수 있습니다."),
-    INVALID_USER_EXISTENCE(HttpStatus.BAD_REQUEST, "중복된 username 입니다."),
+    INVALID_USER_EXISTENCE(HttpStatus.BAD_REQUEST, "중복된 email 입니다."),
     INVALID_USER_PASSWORD(HttpStatus.BAD_REQUEST, "비밀번호를 다시 입력해주세요."),
     INVALID_ADMIN_PASSWORD(HttpStatus.BAD_REQUEST, "관리자의 비밀번호를 다시 입력해주세요."),
     INVALID_LIKE(HttpStatus.BAD_REQUEST, "이미 좋아요를 했습니다"),
