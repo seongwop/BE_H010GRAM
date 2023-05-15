@@ -46,11 +46,4 @@ public class CommentController {
     public ResponseDto<?> deleteComment(@PathVariable Long commentId, @AuthenticationPrincipal UserDetailsImpl userDetails) {
         return commentService.deleteComment(commentId, userDetails.getMember());
     }
-
-    //댓글좋아요
-    @PostMapping("/likes/{commentId}")
-    public ResponseDto<?> likeComment(@PathVariable Long commentId, @AuthenticationPrincipal UserDetailsImpl userDetails) {
-
-        return commentService.likeComment(commentId, userDetails.getMember());
-    }
 }
