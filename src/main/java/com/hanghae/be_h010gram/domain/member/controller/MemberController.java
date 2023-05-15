@@ -36,7 +36,7 @@ public class MemberController {
         return memberService.getProfile(memberId, userDetails.getMember());
     }
 
-    @PutMapping(value = "/members/{memberId}", consumes = {MediaType.MULTIPART_FORM_DATA_VALUE, MediaType.APPLICATION_FORM_URLENCODED_VALUE})
+    @PutMapping(value = "/members/{memberId}")
     public ResponseDto<String> updateProfile(@PathVariable Long memberId,
                                              @RequestPart(value = "profileRequestDto", required = false) ProfileRequestDto profileRequestDto,
                                              @RequestPart(value = "imageFile", required = false) MultipartFile image,
