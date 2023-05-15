@@ -68,7 +68,7 @@ public class LikeService {
         CommentLike commentLike = commentLikeRepository.findByCommentAndMember(comment, existingMember);
         commentLikeRepository.delete(commentLike);
         comment.updateLike(false);
-        return ResponseDto.setSuccess("좋아요 취소 성공");
+        return ResponseDto.setSuccess("댓글 좋아요 취소 성공");
     }
 
 
@@ -86,7 +86,7 @@ public class LikeService {
 
         postLikeRepository.save(new PostLike(post, existingMember));
         post.updateLike(true);
-        return ResponseDto.setSuccess("좋아요 성공");
+        return ResponseDto.setSuccess("게시글 좋아요 성공");
     }
 
     // 게시글 좋아요 취소
@@ -104,6 +104,6 @@ public class LikeService {
         PostLike postLike = postLikeRepository.findByPostAndMember(post, existingMember);
         postLikeRepository.delete(postLike);
         post.updateLike(false);
-        return ResponseDto.setSuccess("좋아요 취소");
+        return ResponseDto.setSuccess("게시글 좋아요 취소 성공");
     }
 }
