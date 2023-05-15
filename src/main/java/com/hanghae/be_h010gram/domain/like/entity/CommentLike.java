@@ -22,12 +22,11 @@ public class CommentLike {
     private Member member;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "comment_id")
+    @JoinColumn(name = "comment_id", nullable = false)
     private Comment comment;
 
-    public CommentLike(Member member, Comment comment) {
+    public CommentLike(Comment comment, Member member) {
         this.comment = comment;
         this.member = member;
-        comment.getCommentLikes().add(this);
     }
 }

@@ -19,7 +19,7 @@ public class CommentResponseDto {
         this.id = comment.getId();
         this.nickname = comment.getMember().getNickname();
         this.content = comment.getContent();
-        this.liked = comment.getCommentLikes().size();
+        this.liked = comment.getLiked();
         this.createdAt = comment.getCreatedAt();
     }
 

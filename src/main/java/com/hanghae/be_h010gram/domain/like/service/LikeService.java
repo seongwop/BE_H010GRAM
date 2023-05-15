@@ -34,25 +34,41 @@ public class LikeService {
     @Transactional
     public ResponseDto<LikeResponseDto> likeComment(Long commentId, Member member) {
         // 댓글 존재확인.
-        Comment comment = commentRepository.findById(commentId).orElseThrow(() -> new CustomException(ExceptionEnum.COMMENT_NOT_FOUND));
+        Comment comment = commentRepository.findById(commentId).orElseThrow(() ->
+             new CustomException(ExceptionEnum.COMMENT_NOT_FOUND)
+        );
 
-        commentLikeRepository.save(new CommentLike(member, comment));
+        Member existingMember = memberRepository.findById(member.getId()).orElseThrow(() ->
+             new CustomException(INVALID_USER)
+        );
+
+        boolean isPostLikedByMember = commentLikeRepository.existsByCommentAndMember(comment, existingMember);
+        if (isPostLikedByMember) {
+            throw new CustomException(INVALID_LIKE);
+        }
+
+        commentLikeRepository.save(new CommentLike(comment, existingMember));
+        comment.updateLike(true);
         return ResponseDto.setSuccess("댓글 좋아요 성공");
     }
 
     //댓글 좋아요 취소
     @Transactional
-    public ResponseDto<?> likeCancelComment(Long commentId, Member member) {
+    public ResponseDto<LikeResponseDto> likeCancelComment(Long commentId, Member member) {
         // 댓글 존재확인.
         Comment comment = commentRepository.findById(commentId).orElseThrow(() -> new CustomException(ExceptionEnum.COMMENT_NOT_FOUND));
+        // 회원 확인.
+        Member existingMember = memberRepository.findById(member.getId()).orElseThrow(() -> new CustomException(INVALID_USER));
 
-        if (commentLikeRepository.findByMemberAndComment(member, comment) != null) {
-
-            commentLikeRepository.delete(new CommentLike(member, comment));
-            return ResponseDto.setSuccess("댓글 좋아요 취소 성공");
-        } else {
+        boolean isCommentLikedByMember = commentLikeRepository.existsByCommentAndMember(comment, existingMember);
+        if (!isCommentLikedByMember) {
             throw new CustomException(INVALID_LIKE_CANCEL);
         }
+
+        CommentLike commentLike = commentLikeRepository.findByCommentAndMember(comment, existingMember);
+        commentLikeRepository.delete(commentLike);
+        comment.updateLike(false);
+        return ResponseDto.setSuccess("좋아요 취소 성공");
     }
 
 

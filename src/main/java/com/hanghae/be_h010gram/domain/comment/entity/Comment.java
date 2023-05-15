@@ -2,7 +2,6 @@ package com.hanghae.be_h010gram.domain.comment.entity;
 
 
 import com.hanghae.be_h010gram.domain.comment.dto.CommentRequestDto;
-import com.hanghae.be_h010gram.domain.like.entity.CommentLike;
 import com.hanghae.be_h010gram.domain.member.entity.Member;
 import com.hanghae.be_h010gram.domain.post.entity.Post;
 import com.hanghae.be_h010gram.util.Timestamped;
@@ -11,9 +10,7 @@ import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
-
-import java.util.ArrayList;
-import java.util.List;
+import org.hibernate.annotations.ColumnDefault;
 
 
 @Entity
@@ -38,8 +35,8 @@ public class Comment extends Timestamped {
     @JoinColumn(name = "post_id")
     public Post post;
 
-    @OneToMany(mappedBy = "comment")
-    private List<CommentLike> commentLikes = new ArrayList<>();
+    @ColumnDefault("0")
+    private int liked;
 
     public Comment(CommentRequestDto commentRequestDto, Post post, Member member) {
         this.content = commentRequestDto.getContent();
@@ -47,6 +44,9 @@ public class Comment extends Timestamped {
         this.member = member;
     }
 
+    public void updateLike(boolean likeOrDislike) {
+        this.liked = likeOrDislike ? this.liked + 1 : this.liked - 1;
+    }
 
     public void setMember(Member member) {
         this.member = member;
