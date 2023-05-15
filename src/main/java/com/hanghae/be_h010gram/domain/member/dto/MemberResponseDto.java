@@ -14,6 +14,6 @@ public class MemberResponseDto {
     public MemberResponseDto(Member member) {
         this.email = member.getEmail();
         this.nickname = member.getNickname();
-        this.profileImage = member.getProfileImage();
+        this.profileImage = member.getMemberImage();
     }
 }
