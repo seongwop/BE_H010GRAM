@@ -58,5 +58,4 @@ public class Post extends Timestamped {
     public void updateLike(boolean likeOrDislike) {
         this.liked = likeOrDislike ? this.liked + 1 : this.liked - 1;
     }
-
 }

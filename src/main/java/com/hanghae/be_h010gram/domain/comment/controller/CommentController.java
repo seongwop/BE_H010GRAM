@@ -15,14 +15,14 @@ import java.util.List;
 
 
 @RestController
-@RequestMapping("comments")
+@RequestMapping("api")
 @RequiredArgsConstructor
 public class CommentController {
 
     private final CommentService commentService;
 
     //댓글 등록
-    @PostMapping("/{postId}")
+    @PostMapping("posts/{postId}/comments")
     public ResponseDto<CommentResponseDto> saveComment(@PathVariable Long postId,
                                                        @Valid @RequestBody CommentRequestDto commentRequestDto,
                                                        @AuthenticationPrincipal UserDetailsImpl userDetails) {
@@ -30,12 +30,12 @@ public class CommentController {
     }
 
     //댓글 전체 조회
-    @GetMapping("/{postId}")
+    @GetMapping("posts/{postId}/comments")
     public ResponseDto<List<CommentResponseDto>> getAllComments(@PathVariable Long postId) {
         return commentService.getAllComments(postId); }
 
     //댓글 수정
-    @PutMapping("/{commentId}")
+    @PutMapping("comments/{commentId}")
     public ResponseDto<CommentResponseDto> modifyComment(@PathVariable Long commentId,
                                            @Valid @RequestBody CommentRequestDto commentRequestDto,
                                            @AuthenticationPrincipal UserDetailsImpl userDetails) {
@@ -43,7 +43,7 @@ public class CommentController {
     }
 
     //댓글 삭제
-    @DeleteMapping("/{commentId}")
+    @DeleteMapping("comments/{commentId}")
     public ResponseDto<?> deleteComment(@PathVariable Long commentId, @AuthenticationPrincipal UserDetailsImpl userDetails) {
         return commentService.deleteComment(commentId, userDetails.getMember());
     }
