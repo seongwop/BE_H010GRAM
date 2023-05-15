@@ -1,16 +1,14 @@
 package com.hanghae.be_h010gram.domain.like.service;
 
 import com.hanghae.be_h010gram.domain.comment.entity.Comment;
-import com.hanghae.be_h010gram.domain.comment.entity.CommentLike;
-import com.hanghae.be_h010gram.domain.comment.repository.CommentLikeRepository;
 import com.hanghae.be_h010gram.domain.comment.repository.CommentRepository;
+import com.hanghae.be_h010gram.domain.like.entity.CommentLike;
+import com.hanghae.be_h010gram.domain.like.entity.PostLike;
 import com.hanghae.be_h010gram.domain.like.repository.CommentLikeRepository;
 import com.hanghae.be_h010gram.domain.like.repository.PostLikeRepository;
 import com.hanghae.be_h010gram.domain.member.entity.Member;
 import com.hanghae.be_h010gram.domain.member.repository.MemberRepository;
 import com.hanghae.be_h010gram.domain.post.entity.Post;
-import com.hanghae.be_h010gram.domain.post.entity.PostLike;
-import com.hanghae.be_h010gram.domain.post.repository.PostLikeRepository;
 import com.hanghae.be_h010gram.domain.post.repository.PostRepository;
 import com.hanghae.be_h010gram.exception.CustomException;
 import com.hanghae.be_h010gram.exception.ExceptionEnum;
