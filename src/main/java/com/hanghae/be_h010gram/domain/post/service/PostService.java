@@ -26,7 +26,6 @@ public class PostService {
 
     private final PostRepository postRepository;
     private final PostLikeRepository postLikeRepository;
-    private final MemberRepository memberRepository;
 
     // 전체 게시물 목록 조회
     @Transactional(readOnly = true)

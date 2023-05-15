@@ -11,5 +11,4 @@ public class BeH010GramApplication {
     public static void main(String[] args) {
         SpringApplication.run(BeH010GramApplication.class, args);
     }
-
 }

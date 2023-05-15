@@ -33,7 +33,7 @@ public class LikeController {
     }
 
     //댓글 좋아요 취소
-    @PostMapping("{commentId}")
+    @DeleteMapping("{commentId}")
     public ResponseDto<?> dislikeComment(@PathVariable Long commentId, @AuthenticationPrincipal UserDetailsImpl userDetails) {
         return likeService.dislikeComment(commentId, userDetails.getMember());
     }

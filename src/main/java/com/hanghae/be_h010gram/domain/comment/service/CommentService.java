@@ -24,7 +24,6 @@ import org.springframework.transaction.annotation.Transactional;
 public class CommentService {
     private final PostRepository postRepository;
     private final CommentRepository commentRepository;
-    private final CommentLikeRepository commentLikeRepository;
 
     /**
      * 댓글 등록
