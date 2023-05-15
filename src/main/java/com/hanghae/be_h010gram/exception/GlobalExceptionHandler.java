@@ -1,5 +1,6 @@
 package com.hanghae.be_h010gram.exception;
 
+import com.amazonaws.services.s3.model.AmazonS3Exception;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
 import org.springframework.http.converter.HttpMessageNotReadableException;
@@ -9,6 +10,8 @@ import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 import org.springframework.web.multipart.MaxUploadSizeExceededException;
+
+import static com.hanghae.be_h010gram.exception.ExceptionEnum.*;
 
 @RestControllerAdvice
 @Slf4j
@@ -31,13 +34,18 @@ public class GlobalExceptionHandler {
             builder.append(fieldError.getDefaultMessage());
         }
 
-        return ErrorResponse.toResponseEntity(ExceptionEnum.INVALID_SIGN, builder.toString());
+        return ErrorResponse.toResponseEntity(INVALID_SIGN, builder.toString());
     }
 
     @ExceptionHandler(MaxUploadSizeExceededException.class)
     protected ResponseEntity<ErrorResponse> handleMaxUploadSizeExceededException(MaxUploadSizeExceededException e) {
         log.info("handleMaxUploadSizeExceededException", e);
 
-        return ErrorResponse.toResponseEntity(ExceptionEnum.FILE_SIZE_OVER);
+        return ErrorResponse.toResponseEntity(FILE_SIZE_OVER);
+    }
+
+    @ExceptionHandler(AmazonS3Exception.class)
+    public ResponseEntity<ErrorResponse> handleFileExtensionException(AmazonS3Exception e) {
+        return ErrorResponse.toResponseEntity(INVALID_FILE_EXTENSION);
     }
 }
