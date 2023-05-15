@@ -29,9 +29,10 @@ public class CommentController {
         return commentService.saveComment(postId, commentRequestDto, userDetails.getMember());
     }
 
-    //댓글 리스트 전체조회
-    @GetMapping("/{commentslist}")
-    public ResponseDto<List<CommentResponseDto>> getAllComments() {return commentService.getAllComments(); }
+    //댓글 전체 조회
+    @GetMapping("/{postId}")
+    public ResponseDto<List<CommentResponseDto>> getAllComments(@PathVariable Long postId) {
+        return commentService.getAllComments(postId); }
 
     //댓글 수정
     @PutMapping("/{commentId}")
