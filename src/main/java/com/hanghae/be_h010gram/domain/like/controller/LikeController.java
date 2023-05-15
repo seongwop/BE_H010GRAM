@@ -16,13 +16,13 @@ public class LikeController {
     private final LikeService likeService;
 
     // 게시글 좋아요
-    @PostMapping("posts/{postId}")
+    @PostMapping("posts/{postId}/likes")
     public ResponseDto<?> likePost(@PathVariable Long postId, @AuthenticationPrincipal UserDetailsImpl userDetails) {
         return likeService.likePost(postId, userDetails.getMember());
     }
 
     // 게시글 좋아요 취소
-    @DeleteMapping("posts/{postId}")
+    @DeleteMapping("posts/{postId}/likes")
     public ResponseDto<?> likeCancelPost(@PathVariable Long postId, @AuthenticationPrincipal UserDetailsImpl userDetails) {
         return likeService.likeCancelPost(postId, userDetails.getMember());
     }
