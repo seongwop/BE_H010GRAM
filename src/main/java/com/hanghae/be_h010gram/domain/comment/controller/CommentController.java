@@ -15,14 +15,14 @@ import java.util.List;
 
 
 @RestController
-@RequestMapping()
+@RequestMapping("api")
 @RequiredArgsConstructor
 public class CommentController {
 
     private final CommentService commentService;
 
     //댓글 등록
-    @PostMapping("/{postsId}/comments")
+    @PostMapping("{postId}/comments")
     public ResponseDto<CommentResponseDto> saveComment(@PathVariable Long postId,
                                                        @Valid @RequestBody CommentRequestDto commentRequestDto,
                                                        @AuthenticationPrincipal UserDetailsImpl userDetails) {
@@ -30,7 +30,7 @@ public class CommentController {
     }
 
     //댓글 전체 조회
-    @GetMapping("/{postId}/comments")
+    @GetMapping("{postId}/comments")
     public ResponseDto<List<CommentResponseDto>> getAllComments(@PathVariable Long postId) {
         return commentService.getAllComments(postId); }
 
