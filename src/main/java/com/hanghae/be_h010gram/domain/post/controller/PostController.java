@@ -38,6 +38,13 @@ public class PostController {
         return postService.getPost(postId);
     }
 
+    // 내 게시글 목록 조회
+    @GetMapping("mypage")
+    @Operation(summary = "내 게시글 전체 조회")
+    public ResponseDto<List<MainPostResponseDto>> getMyPosts(@AuthenticationPrincipal UserDetailsImpl userDetails) {
+        return postService.getMyPosts(userDetails.getMember());
+    }
+
     // 추가
     @PostMapping(consumes = {MediaType.MULTIPART_FORM_DATA_VALUE, MediaType.APPLICATION_FORM_URLENCODED_VALUE})
     @Operation(summary = "게시글 생성")
