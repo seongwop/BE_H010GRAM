@@ -35,7 +35,7 @@ public class CommentController {
 
     //댓글 전체 조회
     @GetMapping("posts/{postId}/comments")
-    @Operation(summary = "댓글 전체 조회")
+    @Operation(summary = "해당 게시글 댓글 전체 조회")
     public ResponseDto<List<CommentResponseDto>> getAllComments(@PathVariable Long postId) {
         return commentService.getAllComments(postId); }
 
