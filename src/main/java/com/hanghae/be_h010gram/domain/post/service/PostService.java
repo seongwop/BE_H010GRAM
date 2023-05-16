@@ -44,9 +44,9 @@ public class PostService {
 
     // 선택한 게시물 상세 조회
     @Transactional(readOnly = true)
-    public ResponseDto<PostResponseDto> getPost(Long id) {
-        Post post = postRepository.findById(id).orElseThrow(() -> new CustomException(POST_NOT_FOUND));
-        return ResponseDto.setSuccess(id + "번 게시글 조회 성공", new PostResponseDto(post));
+    public ResponseDto<PostResponseDto> getPost(Long postId) {
+        Post post = postRepository.findById(postId).orElseThrow(() -> new CustomException(POST_NOT_FOUND));
+        return ResponseDto.setSuccess(postId + "번 게시글 조회 성공", new PostResponseDto(post));
     }
 
     // 게시물 등록
@@ -67,8 +67,8 @@ public class PostService {
 
     // 게시물 수정
     @Transactional
-    public ResponseDto<PostResponseDto> updatePost(Long id, PostRequestDto postRequestDto, MultipartFile image, Member member) throws IOException {
-        Post post = postRepository.findById(id).orElseThrow(() -> new CustomException(POST_NOT_FOUND));
+    public ResponseDto<PostResponseDto> updatePost(Long postId, PostRequestDto postRequestDto, MultipartFile image, Member member) throws IOException {
+        Post post = postRepository.findById(postId).orElseThrow(() -> new CustomException(POST_NOT_FOUND));
         if (!post.getMember().getId().equals(member.getId())) {
             throw new CustomException(INVALID_USER);
         }
@@ -87,10 +87,10 @@ public class PostService {
 
     // 게시물 삭제
     @Transactional
-    public ResponseDto<?> deletePost(Long id, Member member) {
-        Post post = postRepository.findById(id).orElseThrow(() -> new CustomException(POST_NOT_FOUND));
+    public ResponseDto<?> deletePost(Long postId, Member member) {
+        Post post = postRepository.findById(postId).orElseThrow(() -> new CustomException(POST_NOT_FOUND));
         if (post.getMember().getId().equals(member.getId())) {
-            postLikeRepository.deleteById(id);
+            postLikeRepository.deleteById(postId);
             postRepository.delete(post);
             return ResponseDto.setSuccess("게시글 삭제 성공", null);
         } else {

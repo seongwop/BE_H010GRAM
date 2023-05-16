@@ -32,10 +32,10 @@ public class PostController {
     }
 
     // 상세 조회
-    @GetMapping("{id}")
+    @GetMapping("{postId}")
     @Operation(summary = "게시글 상세 조회")
-    public ResponseDto<PostResponseDto> getPost(@PathVariable Long id) {
-        return postService.getPost(id);
+    public ResponseDto<PostResponseDto> getPost(@PathVariable Long postId) {
+        return postService.getPost(postId);
     }
 
     // 추가
@@ -48,20 +48,20 @@ public class PostController {
     }
 
     // 수정
-    @PutMapping(value = "{id}", consumes = {MediaType.MULTIPART_FORM_DATA_VALUE, MediaType.APPLICATION_FORM_URLENCODED_VALUE})
+    @PutMapping(value = "{postId}", consumes = {MediaType.MULTIPART_FORM_DATA_VALUE, MediaType.APPLICATION_FORM_URLENCODED_VALUE})
     @Operation(summary = "게시글 수정")
-    public ResponseDto<PostResponseDto> updatePost(@PathVariable Long id,
+    public ResponseDto<PostResponseDto> updatePost(@PathVariable Long postId,
                                                    @RequestPart(value = "postRequestDto", required = false) PostRequestDto postRequestDto,
                                                    @RequestPart(value = "imageFile", required = false) MultipartFile image,
                                                    @AuthenticationPrincipal UserDetailsImpl userDetails) throws IOException {
-        return postService.updatePost(id, postRequestDto, image, userDetails.getMember());
+        return postService.updatePost(postId, postRequestDto, image, userDetails.getMember());
     }
 
     // 삭제
-    @DeleteMapping("{id}")
+    @DeleteMapping("{postId}")
     @Operation(summary = "게시글 삭제")
-    public ResponseDto<?> deletePost(@PathVariable Long id,
+    public ResponseDto<?> deletePost(@PathVariable Long postId,
                                      @AuthenticationPrincipal UserDetailsImpl userDetails) {
-        return postService.deletePost(id, userDetails.getMember());
+        return postService.deletePost(postId, userDetails.getMember());
     }
 }
