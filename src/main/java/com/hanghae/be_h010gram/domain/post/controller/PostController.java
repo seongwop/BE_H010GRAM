@@ -6,6 +6,8 @@ import com.hanghae.be_h010gram.domain.post.dto.PostResponseDto;
 import com.hanghae.be_h010gram.domain.post.service.PostService;
 import com.hanghae.be_h010gram.security.auth.UserDetailsImpl;
 import com.hanghae.be_h010gram.util.ResponseDto;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.MediaType;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
@@ -18,23 +20,27 @@ import java.util.List;
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("api/posts")
+@Tag(name = "posts", description = "게시글 API")
 public class PostController {
     private final PostService postService;
 
     // 목록 조회
     @GetMapping
+    @Operation(summary = "게시글 전체 조회")
     public ResponseDto<List<MainPostResponseDto>> getAllPosts() {
         return postService.getAllPosts();
     }
 
     // 상세 조회
     @GetMapping("{id}")
+    @Operation(summary = "게시글 상세 조회")
     public ResponseDto<PostResponseDto> getPost(@PathVariable Long id) {
         return postService.getPost(id);
     }
 
     // 추가
     @PostMapping(consumes = {MediaType.MULTIPART_FORM_DATA_VALUE, MediaType.APPLICATION_FORM_URLENCODED_VALUE})
+    @Operation(summary = "게시글 생성")
     public ResponseDto<PostResponseDto> createPost(@RequestPart(value = "postRequestDto", required = false) PostRequestDto postRequestDto,
                                                    @RequestPart(value = "imageFile", required = false) MultipartFile image,
                                                    @AuthenticationPrincipal UserDetailsImpl userDetails) throws IOException {
@@ -43,6 +49,7 @@ public class PostController {
 
     // 수정
     @PutMapping(value = "{id}", consumes = {MediaType.MULTIPART_FORM_DATA_VALUE, MediaType.APPLICATION_FORM_URLENCODED_VALUE})
+    @Operation(summary = "게시글 수정")
     public ResponseDto<PostResponseDto> updatePost(@PathVariable Long id,
                                                    @RequestPart(value = "postRequestDto", required = false) PostRequestDto postRequestDto,
                                                    @RequestPart(value = "imageFile", required = false) MultipartFile image,
@@ -52,6 +59,7 @@ public class PostController {
 
     // 삭제
     @DeleteMapping("{id}")
+    @Operation(summary = "게시글 삭제")
     public ResponseDto<?> deletePost(@PathVariable Long id,
                                      @AuthenticationPrincipal UserDetailsImpl userDetails) {
         return postService.deletePost(id, userDetails.getMember());
