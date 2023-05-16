@@ -20,7 +20,7 @@ import java.io.IOException;
 @RestController
 @RequestMapping("api")
 @RequiredArgsConstructor
-@Tag(name = "members", description = "회원 API")
+@Tag(name = "member", description = "회원 API")
 public class MemberController {
     private final MemberService memberService;
 
