@@ -9,9 +9,11 @@ import com.hanghae.be_h010gram.domain.post.dto.PostResponseDto;
 import com.hanghae.be_h010gram.domain.post.entity.Post;
 import com.hanghae.be_h010gram.domain.post.repository.PostRepository;
 import com.hanghae.be_h010gram.exception.CustomException;
+import com.hanghae.be_h010gram.security.auth.UserDetailsImpl;
 import com.hanghae.be_h010gram.util.ResponseDto;
 import com.hanghae.be_h010gram.util.S3Service;
 import lombok.RequiredArgsConstructor;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
@@ -47,6 +49,17 @@ public class PostService {
     public ResponseDto<PostResponseDto> getPost(Long postId) {
         Post post = postRepository.findById(postId).orElseThrow(() -> new CustomException(POST_NOT_FOUND));
         return ResponseDto.setSuccess(postId + "번 게시글 조회 성공", new PostResponseDto(post));
+    }
+
+    // 내 게시글 목록 조회
+    @Transactional(readOnly = true)
+    public ResponseDto<List<MainPostResponseDto>> getMyPosts(Member member) {
+        List<MainPostResponseDto> mainPostResponseDtos = postRepository
+                .findAllByMemberIdOrderByCreatedAtDesc(member.getId())
+                .stream()
+                .map(post -> new MainPostResponseDto(post, commentRepository.countByPostId(post.getId())))
+                .collect(Collectors.toList());
+        return ResponseDto.setSuccess("내 게시물 조회 성공", mainPostResponseDtos);
     }
 
     // 게시물 등록
