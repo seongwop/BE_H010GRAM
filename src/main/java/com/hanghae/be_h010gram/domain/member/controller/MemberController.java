@@ -43,7 +43,7 @@ public class MemberController {
         return memberService.getProfile(memberId, userDetails.getMember());
     }
 
-    @PutMapping(value = "/members/{memberId}")
+    @PutMapping(value = "members/{memberId}")
     @Operation(summary = "프로필 수정")
     public ResponseDto<String> updateProfile(@PathVariable Long memberId,
                                              @RequestPart(value = "profileRequestDto", required = false) ProfileRequestDto profileRequestDto,
