@@ -14,6 +14,7 @@ import org.springframework.web.bind.annotation.*;
 @RequiredArgsConstructor
 @RequestMapping("api")
 @Tag(name = "like", description = "좋아요 API")
+@CrossOrigin
 public class LikeController {
 
     private final LikeService likeService;
