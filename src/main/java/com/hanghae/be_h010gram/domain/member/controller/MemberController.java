@@ -3,7 +3,7 @@ package com.hanghae.be_h010gram.domain.member.controller;
 import com.hanghae.be_h010gram.domain.member.dto.MemberRequestDto;
 import com.hanghae.be_h010gram.domain.member.dto.MemberResponseDto;
 import com.hanghae.be_h010gram.domain.member.dto.ProfileRequestDto;
-import com.hanghae.be_h010gram.domain.member.service.MemberService;
+import com.hanghae.be_h010gram.domain.member.Service.MemberService;
 import com.hanghae.be_h010gram.security.auth.UserDetailsImpl;
 import com.hanghae.be_h010gram.util.ResponseDto;
 import io.swagger.v3.oas.annotations.Operation;
@@ -37,13 +37,13 @@ public class MemberController {
         return memberService.register(requestDto);
     }
 
-    @GetMapping("members/{memberId}")
+    @GetMapping("members")
     @Operation(summary = "프로필 조회")
-    public ResponseDto<MemberResponseDto> getProfile(@PathVariable Long memberId, @AuthenticationPrincipal UserDetailsImpl userDetails) {
-        return memberService.getProfile(memberId, userDetails.getMember());
+    public ResponseDto<MemberResponseDto> getProfile(@AuthenticationPrincipal UserDetailsImpl userDetails) {
+        return memberService.getProfile(userDetails.getMember());
     }
 
-    @PutMapping(value = "/members/{memberId}")
+    @PutMapping(value = "members/{memberId}")
     @Operation(summary = "프로필 수정")
     public ResponseDto<String> updateProfile(@PathVariable Long memberId,
                                              @RequestPart(value = "profileRequestDto", required = false) ProfileRequestDto profileRequestDto,

@@ -1,4 +1,4 @@
-package com.hanghae.be_h010gram.domain.member.service;
+package com.hanghae.be_h010gram.domain.member.Service;
 
 
 import com.hanghae.be_h010gram.domain.member.dto.MemberRequestDto;
@@ -73,15 +73,12 @@ public class MemberService {
     }
 
     @Transactional(readOnly = true)
-    public ResponseDto<MemberResponseDto> getProfile(Long memberId, Member member) {
+    public ResponseDto<MemberResponseDto> getProfile(Member member) {
         //현재 로그인 멤버 조회
-        Member loginMember = isExistMember(memberId);
-
-        //로그인된 멤버와 토큰 정보의 멤버가 동일한지 확인
-        isMemberEqual(member.getId(), loginMember.getId());
+        Member loginMember = isExistMember(member.getId());
 
         //성공
-        MemberResponseDto memberResponseDto = new MemberResponseDto(member);
+        MemberResponseDto memberResponseDto = new MemberResponseDto(loginMember);
         return ResponseDto.setSuccess("success", memberResponseDto);
     }
 
