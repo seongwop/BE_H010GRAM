@@ -6,6 +6,7 @@ import com.amazonaws.services.s3.model.ObjectMetadata;
 import com.amazonaws.services.s3.model.PutObjectRequest;
 import com.hanghae.be_h010gram.exception.CustomException;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
@@ -17,6 +18,7 @@ import static com.hanghae.be_h010gram.exception.ExceptionEnum.FILE_NOT_FOUND;
 
 @Service
 @RequiredArgsConstructor
+@Slf4j
 public class S3Service {
     private final AmazonS3Client amazonS3Client;
 
@@ -27,7 +29,8 @@ public class S3Service {
     public String uploadFile(MultipartFile multipartFile) throws IOException {
         validateFileExists(multipartFile);
 
-        String fileName = UUID.randomUUID().toString() + "_" + multipartFile.getOriginalFilename();
+        String fileName = UUID.randomUUID() + "_" + multipartFile.getOriginalFilename();
+        log.info(fileName);
 
         ObjectMetadata objectMetadata = new ObjectMetadata();
         objectMetadata.setContentLength(multipartFile.getSize());
