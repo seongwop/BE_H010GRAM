@@ -73,7 +73,7 @@ public class MemberService {
     }
 
     @Transactional(readOnly = true)
-    public ResponseDto<MemberResponseDto> getProfile(Long memberId, Member member) {
+    public ResponseDto<MemberResponseDto> getMember(Long memberId, Member member) {
         //현재 로그인 멤버 조회
         Member loginMember = isExistMember(member.getId());
 
@@ -85,7 +85,7 @@ public class MemberService {
     }
 
     @Transactional
-    public ResponseDto<String> updateProfile(Long memberId, ProfileRequestDto profileRequestDto, MultipartFile image, Member member) throws IOException {
+    public ResponseDto<String> updateMember(Long memberId, ProfileRequestDto profileRequestDto, MultipartFile image, Member member) throws IOException {
         //회원 조회
         Member updateMember = isExistMember(memberId);
 

@@ -39,16 +39,16 @@ public class MemberController {
 
     @GetMapping("members/{memberId}")
     @Operation(summary = "프로필 조회")
-    public ResponseDto<MemberResponseDto> getProfile(@PathVariable Long memberId, @AuthenticationPrincipal UserDetailsImpl userDetails) {
-        return memberService.getProfile(memberId, userDetails.getMember());
+    public ResponseDto<MemberResponseDto> getMember(@PathVariable Long memberId, @AuthenticationPrincipal UserDetailsImpl userDetails) {
+        return memberService.getMember(memberId, userDetails.getMember());
     }
 
     @PutMapping(value = "members/{memberId}")
     @Operation(summary = "프로필 수정")
-    public ResponseDto<String> updateProfile(@PathVariable Long memberId,
+    public ResponseDto<String> updateMember(@PathVariable Long memberId,
                                              @RequestPart(value = "profileRequestDto", required = false) ProfileRequestDto profileRequestDto,
                                              @RequestPart(value = "imageFile", required = false) MultipartFile image,
                                              @AuthenticationPrincipal UserDetailsImpl userDetails) throws IOException {
-        return memberService.updateProfile(memberId, profileRequestDto, image, userDetails.getMember());
+        return memberService.updateMember(memberId, profileRequestDto, image, userDetails.getMember());
     }
 }
