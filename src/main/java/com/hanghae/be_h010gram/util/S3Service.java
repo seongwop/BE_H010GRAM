@@ -11,6 +11,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
+import java.util.UUID;
 
 import static com.hanghae.be_h010gram.exception.ExceptionEnum.FILE_NOT_FOUND;
 
@@ -26,7 +27,7 @@ public class S3Service {
     public String uploadFile(MultipartFile multipartFile) throws IOException {
         validateFileExists(multipartFile);
 
-        String fileName = FileNameBuilder.buildFileName(multipartFile.getOriginalFilename());
+        String fileName = UUID.randomUUID().toString() + "_" + multipartFile.getOriginalFilename();
 
         ObjectMetadata objectMetadata = new ObjectMetadata();
         objectMetadata.setContentLength(multipartFile.getSize());
