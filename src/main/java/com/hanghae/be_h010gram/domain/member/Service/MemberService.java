@@ -73,12 +73,14 @@ public class MemberService {
     }
 
     @Transactional(readOnly = true)
-    public ResponseDto<MemberResponseDto> getProfile(Member member) {
+    public ResponseDto<MemberResponseDto> getProfile(Long memberId, Member member) {
         //현재 로그인 멤버 조회
         Member loginMember = isExistMember(member.getId());
 
+        isMemberEqual(memberId, loginMember.getId());
+
         //성공
-        MemberResponseDto memberResponseDto = new MemberResponseDto(loginMember);
+        MemberResponseDto memberResponseDto = new MemberResponseDto(member);
         return ResponseDto.setSuccess("success", memberResponseDto);
     }
 
