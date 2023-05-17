@@ -21,6 +21,7 @@ import java.util.List;
 @RequiredArgsConstructor
 @RequestMapping("api/posts")
 @Tag(name = "post", description = "게시글 API")
+@CrossOrigin
 public class PostController {
     private final PostService postService;
 

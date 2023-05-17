@@ -20,6 +20,7 @@ import java.util.List;
 @RequestMapping("api")
 @RequiredArgsConstructor
 @Tag(name = "comment", description = "댓글 API")
+@CrossOrigin
 public class CommentController {
 
     private final CommentService commentService;

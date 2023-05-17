@@ -21,6 +21,7 @@ import java.io.IOException;
 @RequestMapping("api")
 @RequiredArgsConstructor
 @Tag(name = "member", description = "회원 API")
+@CrossOrigin
 public class MemberController {
     private final MemberService memberService;
 
