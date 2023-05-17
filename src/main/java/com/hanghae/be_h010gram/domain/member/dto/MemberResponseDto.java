@@ -7,11 +7,13 @@ import lombok.Setter;
 @Getter
 @Setter
 public class MemberResponseDto {
+    private Long memberId;
     private String email;
     private String nickname;
     private String profileImage;
 
     public MemberResponseDto(Member member) {
+        this.memberId = member.getId();
         this.email = member.getEmail();
         this.nickname = member.getNickname();
         this.profileImage = member.getMemberImage();

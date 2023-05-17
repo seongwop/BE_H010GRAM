@@ -37,10 +37,10 @@ public class MemberController {
         return memberService.register(requestDto);
     }
 
-    @GetMapping("members")
+    @GetMapping("members/{memberId}")
     @Operation(summary = "프로필 조회")
-    public ResponseDto<MemberResponseDto> getProfile(@AuthenticationPrincipal UserDetailsImpl userDetails) {
-        return memberService.getProfile(userDetails.getMember());
+    public ResponseDto<MemberResponseDto> getProfile(@PathVariable Long memberId, @AuthenticationPrincipal UserDetailsImpl userDetails) {
+        return memberService.getProfile(memberId, userDetails.getMember());
     }
 
     @PutMapping(value = "members/{memberId}")
