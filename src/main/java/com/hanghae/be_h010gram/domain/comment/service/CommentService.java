@@ -35,6 +35,7 @@ public class CommentService {
         Post post = validateExistPost(id);
 
         Comment comment = commentRepository.save(new Comment(commentRequestDto, post, member));
+        post.addComment(comment);
         return ResponseDto.setSuccess("댓글 등록 성공", new CommentResponseDto(comment));
     }
 

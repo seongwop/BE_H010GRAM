@@ -1,5 +1,6 @@
 package com.hanghae.be_h010gram.domain.post.entity;
 
+import com.hanghae.be_h010gram.domain.comment.entity.Comment;
 import com.hanghae.be_h010gram.domain.member.entity.Member;
 import com.hanghae.be_h010gram.domain.post.dto.PostRequestDto;
 import com.hanghae.be_h010gram.exception.CustomException;
@@ -10,6 +11,8 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 import org.hibernate.annotations.ColumnDefault;
 
+import java.util.List;
+
 import static com.hanghae.be_h010gram.exception.ExceptionEnum.POST_CONTENT_NOT_FOUND;
 import static com.hanghae.be_h010gram.exception.ExceptionEnum.USER_NOT_FOUND;
 
@@ -18,6 +21,7 @@ import static com.hanghae.be_h010gram.exception.ExceptionEnum.USER_NOT_FOUND;
 @Setter
 @NoArgsConstructor
 public class Post extends Timestamped {
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "POST_ID")
@@ -29,6 +33,9 @@ public class Post extends Timestamped {
     @ManyToOne
     @JoinColumn(name = "MEMBER_ID")
     private Member member;
+
+    @OneToMany(mappedBy = "post", cascade = CascadeType.REMOVE)
+    private List<Comment> comments;
 
     @ColumnDefault("0")
     private int liked;
@@ -49,6 +56,9 @@ public class Post extends Timestamped {
         this.content = postRequestDto.getContent();
         this.member = member;
         this.postImage = getPostImage();
+    }
+    public void addComment(Comment comment) {
+        this.comments.add(comment);
     }
 
     public void update(PostRequestDto postRequestDto) {

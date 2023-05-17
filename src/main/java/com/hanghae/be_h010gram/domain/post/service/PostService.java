@@ -8,13 +8,18 @@ import com.hanghae.be_h010gram.domain.post.dto.PostRequestDto;
 import com.hanghae.be_h010gram.domain.post.dto.PostResponseDto;
 import com.hanghae.be_h010gram.domain.post.entity.Post;
 import com.hanghae.be_h010gram.domain.post.repository.PostRepository;
+import com.hanghae.be_h010gram.domain.post.repository.PostRepositoryCustom;
 import com.hanghae.be_h010gram.exception.CustomException;
 import com.hanghae.be_h010gram.util.ResponseDto;
 import com.hanghae.be_h010gram.util.S3Service;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Slice;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
+
 
 import java.io.IOException;
 import java.util.List;
@@ -28,18 +33,23 @@ public class PostService {
 
     private final PostRepository postRepository;
     private final PostLikeRepository postLikeRepository;
-    private final CommentRepository commentRepository;
     private final S3Service s3Service;
+
 
     // 전체 게시물 목록 조회
     @Transactional(readOnly = true)
-    public ResponseDto<List<MainPostResponseDto>> getAllPosts() {
-        List<MainPostResponseDto> mainPostResponseDtos = postRepository
-                .findAllByOrderByCreatedAtDesc()
-                .stream()
-                .map(post -> new MainPostResponseDto(post, commentRepository.countByPostId(post.getId())))
-                .collect(Collectors.toList());
-        return ResponseDto.setSuccess("전체 게시물 조회 성공", mainPostResponseDtos);
+    public ResponseDto<Slice<MainPostResponseDto>> getAllPosts(int page, int size) {
+
+        Pageable pageable = PageRequest.of(page, size);
+
+        return ResponseDto.setSuccess("전체 게시물 조회 성공", postRepository.findAllPostPageableByOrderByCreatedAtDesc(pageable));
+
+//        List<MainPostResponseDto> mainPostResponseDtos = postRepository
+//                .findAllByOrderByCreatedAtDesc()
+//                .stream()
+//                .map(post -> new MainPostResponseDto(post, commentRepository.countByPostId(post.getId())))
+//                .collect(Collectors.toList());
+//        return ResponseDto.setSuccess("전체 게시물 조회 성공", mainPostResponseDtos);
     }
 
     // 선택한 게시물 상세 조회
